@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mundial 2026 — Apostas</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#b8921f" />
+  <!-- Favicons: PNG para o Safari (não lida bem com SVG) + SVG para o Chrome -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Lobster&family=Righteous&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="header-title">
+        <img src="https://crests.football-data.org/wm26.png" alt="WC 2026" class="wc-logo" />
+        <div>
+          <h1>Mundial 2026</h1>
+        </div>
+      </div>
+      <nav class="view-nav" id="viewNav">
+        <button class="view-btn active" data-view="apostas">Apostas</button>
+        <button class="view-btn" data-view="classificacao">Classificação</button>
+        <button class="view-btn" data-view="regras">Regras e Instruções</button>
+      </nav>
+    </div>
+  </header>
+
+  <nav class="phase-nav" id="phaseNav">
+    <button class="phase-btn active" data-phase="GROUP_J1">Grupos J1</button>
+    <button class="phase-btn" data-phase="GROUP_J2">Grupos J2</button>
+    <button class="phase-btn" data-phase="GROUP_J3">Grupos J3</button>
+    <button class="phase-btn" data-phase="LAST_32">Ronda 32</button>
+    <button class="phase-btn" data-phase="LAST_16">Oitavos</button>
+    <button class="phase-btn" data-phase="QUARTER_FINALS">Quartos</button>
+    <button class="phase-btn" data-phase="SEMI_FINALS">Meias</button>
+    <button class="phase-btn" data-phase="FINAL">Final / 3º e 4º</button>
+  </nav>
+
+  <div class="pred-col-headers" id="predColHeaders">
+    <div class="pred-col-item">
+      <button class="pred-col-btn" data-player="rui">Rui</button>
+      <span class="pred-col-pts" data-player="rui">0/0</span>
+    </div>
+    <div class="pred-col-item">
+      <button class="pred-col-btn" data-player="bruno">Bruno</button>
+      <span class="pred-col-pts" data-player="bruno">0/0</span>
+    </div>
+    <div class="pred-col-item">
+      <button class="pred-col-btn" data-player="fil">Fil</button>
+      <span class="pred-col-pts" data-player="fil">0/0</span>
+    </div>
+  </div>
+
+  <main id="main">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>A carregar jogos…</p>
+    </div>
+  </main>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>

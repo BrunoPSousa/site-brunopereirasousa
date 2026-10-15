@@ -1,0 +1,186 @@
+:root{--intro:#e8b9d8;--film:#f0f0f0;--qa:#bee0cb;color:#111;background:#fff;font-family:Arial,Helvetica,sans-serif}html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{background:#fff;color:#111}body:not(.shell){height:100dvh;display:flex;flex-direction:column;overflow:hidden}
+header{padding:22px 28px 18px;border-bottom:1px solid #111;background:#fff;flex-shrink:0}
+.eyebrow{color:#555;font-size:11px;font-weight:700;letter-spacing:1.4px}
+h1{font-family:Arial,Helvetica,sans-serif;font-size:clamp(25px,3.4vw,46px);line-height:1;font-weight:900;letter-spacing:-1.8px;margin:10px 0 0}
+.bar{padding:12px 28px;color:#111;font-size:12px;flex-shrink:0}.bar label{font-weight:700;text-transform:uppercase;letter-spacing:.6px}
+button,select,input{border-radius:0;border-color:#aaa;color:#111}button:hover{background:#eee}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #d84db3;outline-offset:2px}
+.primary,.primary:hover{background:#111;border-color:#111;color:#fff}.primary:hover{background:#333}
+.view{flex:1;min-height:0;height:auto!important;margin:0 20px 14px;border:1px solid #bbb;border-radius:0}
+.corner,.dayhead{background:#fff;border-color:#aaa;color:#111}.dayhead.weekend{background:#f3f3f3}.dayhead strong{font-weight:800}.dayhead span,.tick{color:#555}.axis{border-color:#aaa}.lane{border-color:#ccc}.hourline{border-color:#d4d4d4}
+.session{color:#111;border:1px solid #111!important;border-radius:0;background:var(--film)}.session .title{font-weight:800}.session .time{font-variant-numeric:tabular-nums}.session:hover{box-shadow:0 0 0 1px #111;filter:brightness(.98)}
+.session.conflict{border:2px solid #bc2727;color:#8c1515;box-shadow:inset 0 0 0 1px #bc2727}.session .estimate-icon,.session .estimated-label{color:#bc2727;font-weight:700;opacity:1}.session.compact .estimated-label{display:block}
+.film-content{position:absolute;left:0;right:0;padding:4px 8px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}.qa-text{position:absolute;left:0;right:0;padding:2px 8px;font-size:10px;line-height:12px;display:flex;align-items:center;overflow:hidden;text-align:left;color:#153d26}
+dialog{border:1px solid #111;border-radius:0}dialog h2{font-family:Arial,Helvetica,sans-serif;font-weight:800;letter-spacing:-.5px}.muted{color:#555}.toast{background:#111;border-radius:0}.conflicts{flex-shrink:0}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.shell{position:fixed;inset:0;margin:0;overflow:hidden;display:flex;flex-direction:column}.shell nav{background:#111;color:#fff;padding:12px 28px;border:0;min-height:64px;flex-shrink:0}.shell nav span{font-size:19px;font-weight:900;letter-spacing:-.7px}.shell nav button{background:transparent;color:#fff;border:1px solid #777;border-radius:0;font-weight:700}.shell nav button:hover{border-color:#d84db3}.shell nav button[aria-pressed=true]{background:#d84db3;border-color:#d84db3;color:#111}.shell iframe{flex:1;min-height:0;height:auto;width:100%;border:0}
+@media(max-width:650px){header{padding:17px}h1{letter-spacing:-1px}.bar{padding:10px 17px}.view{margin:0 8px 8px}.shell nav{padding:10px 17px;gap:8px}.shell nav span{font-size:17px}.shell nav button{padding:9px 12px}}
+.tick-minor{font-size:9px;color:#777}
+header{position:relative;padding-right:120px;min-height:106px}
+.festival-bird{position:absolute;right:28px;top:12px;width:72px;height:84px;background-image:url('festival-2026.jpg');background-size:216px auto;background-position:left center;background-repeat:no-repeat}
+.session-gap{position:absolute;left:50%;transform:translate(-50%,-50%);padding:0 5px;background:#fff;color:#666;font-size:10px;line-height:12px;white-space:nowrap;pointer-events:none;font-variant-numeric:tabular-nums;z-index:1}
+@media(max-width:650px){header{padding-right:85px}.festival-bird{right:17px;width:54px;height:70px;background-size:162px auto;top:15px}h1{font-size:clamp(21px,5vw,32px)}}
+
+/* Festival identity integrated into the full title band. */
+header{background:#fa36b1;min-height:112px;padding:28px 170px 28px 28px;display:flex;align-items:center;overflow:hidden}
+header h1{margin:0;position:relative;z-index:1}
+.festival-bird{top:-12px;right:24px;width:120px;height:145px;background-size:360px auto;background-position:left center;mix-blend-mode:multiply;transform:rotate(-7deg)}
+@media(max-width:650px){header{padding:24px 100px 24px 17px;min-height:98px}.festival-bird{width:82px;height:108px;right:8px;top:-4px;background-size:246px auto}}
+header{background:#ff3eb5}
+.festival-bird{mix-blend-mode:normal;transform:none;top:0;right:28px;width:98px;height:112px;background-size:294px auto}
+@media(max-width:650px){.festival-bird{width:82px;height:98px;right:8px;top:0;background-size:246px auto}}
+.zoom-small .tick-minor{display:none}
+.zoom-small .session .title{font-size:12px;line-height:1.15}
+.zoom-small .session .time{font-size:10px;margin-bottom:2px}
+.zoom-small .session .presentation{font-size:9px;line-height:1.2}
+.zoom-small .session .category{font-size:10px;margin-top:2px}
+.zoom-small .film-content{padding:3px 6px}
+.zoom-small .qa-text{font-size:9px;line-height:10px;padding:1px 6px}
+.session-when{font-weight:700;margin:18px 0}
+.films .event-heading{font-weight:700}.films .film-detail{padding-left:14px;color:#555;font-size:13px}.films .event-heading small{font-weight:700}#qaDetails:empty,#durationNote:empty{display:none}
+
+.zoom-small .session.compact .presentation,.zoom-small .session.compact .category,.zoom-small .session.compact .qa-text,.zoom-small .session.compact .estimate-icon{display:none}
+/* Safari pode manter o tamanho de texto dentro de elementos com zoom. */
+body.zoom-small .session .title{font-size:11px!important;line-height:1.15!important}body.zoom-small .session .time{font-size:10px!important;line-height:1.15!important;margin-bottom:2px!important}body.zoom-small .session .presentation{font-size:9px!important;line-height:1.15!important}body.zoom-small .session .category,body.zoom-small .qa-text{font-size:9px!important;line-height:1.15!important}body.zoom-small .film-content{padding:3px 6px!important}
+.hourline{z-index:0}.session{z-index:1;cursor:pointer}.hourline.midnight-line{border-top:1px solid rgba(105,25,34,.72);z-index:0;pointer-events:none}
+.editing .session{cursor:grab}.editing .session:active{cursor:grabbing}
+#editMode{margin-left:10px;font-weight:700;background:#fff}#editMode[aria-pressed=true]{background:#111;color:#fff;border-color:#111}
+#qaEditor{border-top:1px solid #ddd;margin-top:16px;padding-top:14px}#qaEditor p{margin:0 0 10px}#qaNameWrap{font-weight:700;font-size:13px}#qaName{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:8px}.qa-editor-actions{margin-top:10px;gap:8px}
+#sessionEditor{border-top:1px solid #ddd;margin-top:16px;padding-top:14px}#sessionEditor>label{display:block;font-weight:700;font-size:13px;margin:10px 0}.film-fields{display:grid;gap:7px;margin:12px 0}.film-row{display:grid;grid-template-columns:minmax(0,1fr) 86px auto;gap:7px}.film-row input{min-width:0}.film-row button{padding:7px 9px;font-size:12px}@media(max-width:480px){.film-row{grid-template-columns:minmax(0,1fr) 68px}.film-row button{grid-column:1/-1;justify-self:start}}
+/* Campos de edição alinhados à largura do conteúdo do diálogo. */
+#sessionEditor>label:has(#sessionTitle),#sessionEditor>label:has(#sessionSection){display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:12px}
+#sessionTitle,#sessionSection{width:100%;min-width:0;box-sizing:border-box}
+#sessionEditor .film-row,#presentationWrap{grid-template-columns:minmax(0,1fr) 86px 70px;gap:7px}
+#sessionEditor>label#presentationWrap{display:grid;align-items:center}
+#presentationMinutes{grid-column:2;width:100%;min-width:0;box-sizing:border-box}
+#sessionEditor .film-row button{width:70px}
+#editor .editor-actions{align-items:center}
+#editor .editor-actions button{min-width:90px}
+#editor .editor-actions #saveDetails,#editor .editor-actions #saveClubDetails{background:#217a45;border-color:#217a45;color:#fff}
+#editor .editor-actions #saveDetails:hover,#editor .editor-actions #saveClubDetails:hover{background:#176236}
+#editor .editor-actions #cancel{background:#c92f37;border-color:#c92f37;color:#fff}
+#editor .editor-actions #cancel:hover{background:#a72129}
+@media(max-width:480px){#sessionEditor .film-row,#presentationWrap{grid-template-columns:minmax(0,1fr) 68px 70px}#sessionEditor .film-row button{grid-column:3;justify-self:stretch}#sessionEditor>label:has(#sessionTitle),#sessionEditor>label:has(#sessionSection){gap:8px}}
+
+/* A ficha de edição mostra controlos; a ficha de consulta mantém o resumo. */
+.editing #editor #editTitle,.editing #editor #editCategory,.editing #editor #sessionWhen,.editing #editor #clubStatus,.editing #editor #clubSummary,.editing #editor #films,.editing #editor #durationNote,.editing #editor #durationBreakdown,.editing #editor #qaDetails{display:none!important}
+.editing #editor #clubWrap{margin:0 0 10px}
+.editing #editor #sessionEditor,.editing #editor #clubEditor{margin-top:18px}
+.editing #editor #sessionEditor>p.muted,.editing #editor #clubEditor>p.muted,.editing #editor #qaEditorNote{display:none}
+/* Seletores de duas posições, com os controlos nativos acessíveis ao teclado. */
+#editor #clubWrap{display:inline-flex!important;gap:0;border:1px solid #111;width:max-content;max-width:100%;vertical-align:top}
+#editor #clubWrap[hidden]{display:none!important}
+#editor #clubWrap label{position:relative;display:inline-flex;justify-content:center;min-width:112px;padding:10px 14px;margin:0;cursor:pointer;font-size:13px;font-weight:700;border-right:1px solid #111}
+#editor #clubWrap label:last-child{border-right:0}
+#editor #clubWrap input,#editor #publicWrap input{position:absolute;width:1px!important;height:1px!important;opacity:0;margin:0!important;padding:0;pointer-events:none}
+#editor #clubWrap label:has(input:checked){background:#111;color:#fff}
+#editor #clubWrap label:has(input:focus-visible),#editor #publicWrap:has(input:focus-visible){outline:3px solid #d84db3;outline-offset:3px}
+#editor #publicWrap{position:relative;display:flex!important;gap:0;width:max-content;max-width:100%;padding:0;border:1px solid #111;cursor:pointer;font-size:13px;font-weight:700}
+#editor #publicWrap[hidden]{display:none!important}
+#editor #publicWrap span{display:inline-flex;align-items:center;justify-content:center;min-width:112px;padding:10px 14px;text-align:center}
+#editor #publicWrap span:first-of-type{border-right:1px solid #111}
+#editor #publicWrap input:checked+span,#editor #publicWrap input:not(:checked)~span:last-child{background:#111;color:#fff}
+
+/* Controlos arredondados e Q&A no fim dos conteúdos da sessão. */
+#editor #clubWrap,#editor #publicWrap{border:1px solid #c8c8c8;border-radius:999px;background:#f1f1f1;padding:3px;gap:3px;overflow:visible}
+#editor #clubWrap label,#editor #publicWrap span{border:0!important;border-radius:999px;padding:9px 16px;transition:background-color .15s ease,color .15s ease,box-shadow .15s ease}
+#editor #clubWrap label:has(input:checked),#editor #publicWrap input:checked+span,#editor #publicWrap input:not(:checked)~span:last-child{background:#111;color:#fff;box-shadow:0 1px 4px #0003}
+#editor #clubWrap label:not(:has(input:checked)):hover,#editor #publicWrap span:hover{background:#ddd}
+#editor #publicWrap input:checked+span:hover,#editor #publicWrap input:not(:checked)~span:last-child:hover{background:#333}
+.editing #editor #qaEditor{border-top:0;margin:14px 0 0;padding:0}
+.editing #editor #qaEditor .qa-editor-actions{justify-content:flex-start}
+
+/* Ajustes finais dos controlos de edição. */
+#editor #clubWrap label:has(input:checked),#editor #publicWrap input:checked+span,#editor #publicWrap input:not(:checked)~span:last-child{background:#ff3eb5;color:#111}
+#editor #publicWrap input:checked+span:hover,#editor #publicWrap input:not(:checked)~span:last-child:hover{background:#ed2fa7}
+#sessionEditor .film-row,#presentationWrap{grid-template-columns:minmax(0,1fr) 62px 70px}
+#presentationMinutes,#sessionEditor .film-row input[type=number]{text-align:right;font-weight:400;font-variant-numeric:tabular-nums}
+@media(max-width:480px){#sessionEditor .film-row,#presentationWrap{grid-template-columns:minmax(0,1fr) 62px 70px}}
+
+/* Notas nas sessões de cinema e botão de consulta. */
+#sessionEditor>label#sessionNotesWrap{display:block;margin-top:16px}
+#sessionNotes{display:block;width:100%;min-height:90px;margin-top:7px;padding:8px;border:1px solid #aaa;box-sizing:border-box;font:inherit;font-weight:400;resize:vertical}
+body:not(.editing) #editor .editor-actions #cancel{background:#111;border-color:#111;color:#fff}
+body:not(.editing) #editor .editor-actions #cancel:hover{background:#333}
+#newSessionButton{font-weight:700;background:#fff}.editing #newSessionButton{display:inline-block}.new-session-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.new-session-fields label,#newSession>label{display:block;font-weight:700;font-size:13px;margin:10px 0}.new-session-fields input,.new-session-fields select,#newSession>label>input{display:block;width:100%;margin-top:6px}.club-choice{display:flex!important;align-items:center;gap:8px}.club-choice input{width:auto!important;margin:0!important}.club-choice label{display:inline-flex;align-items:center;gap:5px;cursor:pointer;font-weight:700;font-size:13px}.club-label{position:absolute;top:5px;right:6px;background:#111;color:#fff;font-size:10px;font-weight:700;line-height:1;padding:4px 5px;z-index:3;text-transform:uppercase;letter-spacing:.3px}.zoom-small .club-label{font-size:8px;padding:3px 4px}
+.session.club-session{--film:#dbe5ec;border-left-color:#41667d}.club-label{background:#0c2c4d;color:#fff}
+
+/* A marca de Clube é apenas informativa fora do modo de edição. */
+dialog#editor{position:relative}.club-dialog-label{position:absolute;top:24px;right:26px;background:#0c2c4d;color:#fff;font-size:11px;font-weight:800;line-height:1;padding:6px 8px;letter-spacing:.35px}.club-dialog-label[hidden],.club-choice[hidden]{display:none!important}
+#clubEditor{border-top:1px solid #ddd;margin-top:16px;padding-top:14px}#clubEditor>label{display:block;font-weight:700;font-size:13px;margin:10px 0}#clubEditor input,#clubEditor textarea,#newClubNotesWrap textarea{display:block;width:100%;margin-top:6px;padding:8px;border:1px solid #aaa;font:inherit}#clubEditor textarea,#newClubNotesWrap textarea{min-height:90px;resize:vertical}.club-summary{display:grid;grid-template-columns:auto 1fr;margin:16px 0 0;border-top:1px solid #ddd}.club-summary dt,.club-summary dd{margin:0;padding:10px 0;border-bottom:1px solid #ddd}.club-summary dt{font-weight:700;padding-right:20px}.club-summary dd{text-align:right;white-space:pre-wrap}.club-summary dd.notes{text-align:left}
+.section-badge{position:absolute;top:5px;right:6px;z-index:3;min-width:27px;padding:4px 5px;background:var(--section-color,#4f687c);color:#fff;font-size:9px;font-weight:700;line-height:1;text-align:center;letter-spacing:.25px}.session:has(.section-badge) .estimate-icon{right:40px}.zoom-small .section-badge{font-size:8px;padding:3px 4px;min-width:24px}
+.section-legend{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:4px;max-width:min(58vw,760px)}.section-key{display:inline-flex;align-items:center;justify-content:center;min-width:25px;height:20px;padding:0 4px;background:var(--section-color,#4f687c);color:#fff;font-size:9px;font-weight:800;line-height:1;letter-spacing:.25px;cursor:help}.section-key:hover{filter:brightness(.86)}@media(max-width:800px){.section-legend{order:3;width:100%;max-width:none;justify-content:flex-start}.section-key{min-width:23px;height:19px;font-size:8px}}
+/* Legenda das secções e estado de público */
+.section-key{position:relative;cursor:default}.section-key{border:0;border-radius:0;padding:0;appearance:none;cursor:pointer}.section-key[aria-pressed="true"]{outline:2px solid #111;outline-offset:2px;filter:brightness(.72)}
+.section-key::after{content:attr(data-tooltip);position:absolute;z-index:30;bottom:calc(100% + 6px);left:50%;transform:translate(-50%,3px);width:max-content;max-width:260px;padding:6px 8px;background:#111;color:#fff;font-size:11px;font-weight:600;line-height:1.2;letter-spacing:0;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .08s ease,transform .08s ease;white-space:normal;text-align:center;box-shadow:0 2px 8px #0003}.section-key:hover::after,.section-key:focus-visible::after{opacity:1;visibility:visible;transform:translate(-50%,0)}.session.not-general{--film:#e6d8a8;border-left-color:#a0771e}.public-choice{display:flex!important;align-items:center;gap:8px}.public-choice[hidden]{display:none!important}.public-choice input{width:auto!important;margin:0!important}
+
+/* Cabeçalho unificado: sala, identidade e título numa única barra rosa. */
+body:not(.shell)>header{display:none}
+.shell nav{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:8px;padding:6px 20px;min-height:68px;background:#ff3eb5;color:#111}
+.shell nav .brand{display:flex;align-items:center;gap:8px;justify-self:start;min-width:0}
+.shell nav .brand-name{font-size:16px;font-weight:900;letter-spacing:-.7px;white-space:nowrap}
+.shell nav .brand-bird{display:block;flex:0 0 30px;width:30px;height:35px;background-image:url('festival-2026.jpg');background-size:90px auto;background-position:left center;background-repeat:no-repeat}
+.shell nav .shell-title{grid-column:2;grid-row:1;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:clamp(19px,2.4vw,27px);font-weight:900;letter-spacing:-1px;line-height:1;white-space:nowrap;text-align:center}
+.shell nav .room-buttons{display:flex;align-items:center;justify-self:end;gap:5px}
+.shell nav .room-buttons button{padding:7px 10px;background:transparent;color:#111;border:1px solid #242424;border-radius:0;font-weight:800}
+.shell nav .room-buttons button:hover{background:#f8b5e1;border-color:#111}
+.shell nav .room-buttons button[aria-pressed=true]{background:#111;border-color:#111;color:#fff}
+.section-key-wide{min-width:42px!important}
+@media(max-width:800px){.shell nav{grid-template-columns:minmax(0,1fr) auto;padding:9px 16px;gap:7px;min-height:96px}.shell nav .brand-name{font-size:16px}.shell nav .brand-bird{flex-basis:30px;width:30px;height:36px;background-size:90px auto}.shell nav .shell-title{grid-column:1/-1;grid-row:2;font-size:23px}.shell nav .room-buttons{gap:5px}.shell nav .room-buttons button{padding:8px 10px;font-size:12px}}
+@media(max-width:480px){.shell nav{padding:8px 10px;min-height:92px}.shell nav .brand-name{font-size:14px}.shell nav .brand-bird{flex-basis:25px;width:25px;height:30px;background-size:75px auto}.shell nav .room-buttons button{padding:7px 7px;font-size:10px}.shell nav .shell-title{font-size:19px}}
+.bar{position:relative;z-index:10}
+.section-key::after{top:calc(100% + 6px);bottom:auto;transform:translate(-50%,-3px)}
+.section-key:hover::after,.section-key:focus-visible::after{transform:translate(-50%,0)}
+
+/* Alternância entre a vista por sala e a vista por dia. */
+.shell nav .shell-title{appearance:none;background:transparent;border:0;color:#111;padding:4px;margin:0;font-family:Arial,Helvetica,sans-serif;font-size:clamp(19px,2.4vw,27px);font-weight:900;letter-spacing:-1px;line-height:1;white-space:nowrap;text-align:center;cursor:pointer}
+.shell nav .shell-title:hover{background:transparent;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+.shell nav .shell-title:focus-visible{outline:3px solid #111;outline-offset:4px}
+.shell nav .day-buttons{display:flex;align-items:center;justify-self:end;gap:5px;flex-wrap:wrap;max-width:45vw;justify-content:flex-end}
+.shell nav .day-buttons[hidden],.shell nav .room-buttons[hidden]{display:none!important}
+.shell nav .day-buttons button{padding:8px 9px;background:transparent;color:#111;border:1px solid #242424;border-radius:0;font-size:12px;font-weight:800;white-space:nowrap}
+.shell nav .day-buttons button[aria-pressed=true]{background:#111;color:#fff}
+@media(max-width:800px){.shell nav .shell-title{grid-column:1/-1;grid-row:2;font-size:22px}.shell nav .day-buttons{grid-column:1/-1;grid-row:3;max-width:none;justify-self:center;justify-content:center}.shell nav:has(.day-buttons:not([hidden])){min-height:120px}}
+.day-view{height:auto!important;min-height:100%;display:block!important;overflow:auto!important;background:#fff}
+.day-toolbar{height:45px;display:flex;align-items:center;gap:18px;padding:5px 16px;font-size:12px;font-weight:700;text-transform:uppercase;flex-shrink:0}
+.day-toolbar select{padding:6px;font-weight:700}
+.daily-calendar{display:grid;grid-template-columns:66px repeat(6,minmax(200px,1fr));min-width:100%;align-items:start;border-top:1px solid #aaa;border-left:1px solid #aaa;overflow:visible}
+.daily-axis{position:relative;height:1534px;padding-top:46px;border-right:1px solid #aaa;background:linear-gradient(#f4f4f4 0 46px,transparent 46px),repeating-linear-gradient(to bottom,transparent 0,transparent 23px,#d4d4d4 23px,#d4d4d4 24px);background-position:0 0,0 46px;background-size:100% 100%,100% 24px;background-repeat:no-repeat,repeat-y}
+.daily-tick{position:absolute;right:5px;transform:translateY(-50%);font-size:10px;color:#555;white-space:nowrap;font-variant-numeric:tabular-nums}.daily-tick:not(.minor){font-weight:700;font-size:11px}.daily-tick.minor{font-size:9px;color:#777}
+.daily-room{min-width:0;border-right:1px solid #aaa}
+.daily-room>header{height:46px;min-height:46px;padding:5px 7px;display:flex;align-items:center;justify-content:space-between;gap:3px;background:#f4f4f4;border-bottom:1px solid #aaa;overflow:hidden}
+.daily-room>header strong{font-size:14px}.daily-room>header div{display:flex;gap:3px}.daily-room>header button{padding:5px 6px;font-size:10px;font-weight:700;white-space:nowrap}
+.daily-room>header button[aria-pressed=true]{background:#111;color:#fff}
+.daily-room iframe{display:block;width:100%;height:1488px;border:0;overflow:hidden}
+.daily-view body:not(.shell){height:auto!important;display:block!important;overflow:visible!important}
+.daily-view header,.daily-view .bar,.daily-view .conflicts,.daily-view #outside,.daily-view #storage{display:none!important}
+.daily-view .view{height:1488px!important;min-height:1488px!important;flex:none!important;margin:0!important;border:0!important;overflow:visible!important}
+.daily-view #calendar{width:100%!important;grid-template-columns:minmax(0,1fr)!important}
+.daily-view .corner,.daily-view .dayhead,.daily-view .axis{display:none!important}
+.daily-view .lane{width:100%!important;min-width:0!important}
+.daily-view .toast{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);z-index:50}
+@media(max-width:900px){.daily-calendar{grid-template-columns:54px repeat(6,minmax(190px,1fr));width:max(100%,900px)}.daily-room>header{height:56px;min-height:56px;display:block}.daily-room>header strong{display:block;margin-bottom:4px}.daily-room>header div{justify-content:flex-start}.daily-room>header button{font-size:9px;padding:4px}}
+.daily-room iframe{height:calc(1488px * var(--daily-scale,1))}
+.daily-view .view{height:1488px!important;min-height:1488px!important}
+.shell nav .shell-title span{font:inherit;letter-spacing:inherit}
+
+/* Eixo horário estreito e contorno completo da primeira data. */
+.corner + .dayhead{border-left:1px solid #aaa}
+
+/* Identidade e navegação do topo: maior, com alinhamento vertical comum. */
+.shell nav{min-height:68px;padding:6px 20px;align-items:center}
+.shell nav .brand{align-items:center;align-self:center}
+.shell nav .brand-name{font-size:20px;line-height:1.1}
+.shell nav .brand-bird{flex-basis:44px;width:44px;height:52px;background-size:132px auto;align-self:center}
+.shell nav .room-buttons{align-items:center;align-self:center}
+.shell nav .room-buttons button{padding:10px 13px;font-size:15px;line-height:1.15}
+.shell nav .shell-title{align-self:center;font-size:clamp(18px,2.2vw,25px)}
+@media(max-width:800px){.shell nav{min-height:96px}.shell nav .brand-name{font-size:18px}.shell nav .brand-bird{flex-basis:38px;width:38px;height:45px;background-size:114px auto}.shell nav .room-buttons button{padding:8px 9px;font-size:13px}}
+@media(max-width:480px){.shell nav{min-height:92px}.shell nav .brand-name{font-size:15px}.shell nav .brand-bird{flex-basis:30px;width:30px;height:36px;background-size:90px auto}.shell nav .room-buttons button{padding:7px 7px;font-size:11px}}
+
+.schedule-loading{position:absolute;inset:0;z-index:2;display:grid;place-items:center;background:rgba(255,255,255,.94);color:#444;font-weight:700;text-align:center;padding:20px}
+/* No mapa por sala a 66%, mostrar só horas, título e Q&A nos cartões. */
+body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.daily-view) .session .category{display:none!important}
+
+/* Seis salas: manter a navegação legível sem sobrepor o título. */
+@media(min-width:951px) and (max-width:1200px){.shell nav{padding-inline:12px}.shell nav .brand-name{font-size:17px}.shell nav .brand-bird{flex-basis:36px;width:36px;height:43px;background-size:108px auto}.shell nav .shell-title{font-size:20px}.shell nav .room-buttons button{padding:8px 9px;font-size:13px}}
+@media(min-width:801px) and (max-width:950px){.shell nav{grid-template-columns:minmax(0,1fr) auto;min-height:96px}.shell nav .shell-title{grid-column:1/-1;grid-row:2}.shell nav .room-buttons{grid-column:2;grid-row:1}.shell nav .room-buttons button{padding:8px 8px;font-size:12px}}

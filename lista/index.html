@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista — Bruno Pereira Sousa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="../assets/favicon.png" type="image/png" sizes="160x160">
+  <link rel="apple-touch-icon" href="../assets/favicon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="blob blob-a" aria-hidden="true"></div>
+  <div class="blob blob-b" aria-hidden="true"></div>
+  <div class="blob blob-c" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div class="layout">
+    <main class="app">
+      <header class="app-header">
+        <h1>Lista de afazeres</h1>
+      </header>
+
+      <form class="add-form" id="add-form">
+        <div class="input-row">
+          <input
+            class="add-input"
+            id="add-input"
+            type="text"
+            placeholder="Nova tarefa…"
+            autocomplete="off"
+            maxlength="200"
+          />
+          <button class="add-btn" type="submit" aria-label="Adicionar tarefa">+</button>
+        </div>
+        <div class="tag-row" id="tag-row">
+          <span class="tag-row-icon" aria-hidden="true">#</span>
+          <div class="pending-chips" id="pending-chips"></div>
+          <input
+            class="tag-input"
+            id="tag-input"
+            type="text"
+            placeholder="etiqueta…"
+            autocomplete="off"
+            maxlength="30"
+          />
+        </div>
+      </form>
+
+      <div class="filters" id="filters" role="group" aria-label="Filtrar tarefas"></div>
+
+      <ul class="task-list" id="task-list" aria-live="polite"></ul>
+
+    </main>
+
+    <aside class="hoje-panel" id="hoje-panel" hidden>
+      <h2 class="panel-title">Hoje</h2>
+      <ul class="panel-list" id="hoje-list"></ul>
+    </aside>
+    <aside class="amanha-panel" id="amanha-panel" hidden>
+      <h2 class="panel-title">Amanhã</h2>
+      <ul class="panel-list" id="amanha-list"></ul>
+    </aside>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
