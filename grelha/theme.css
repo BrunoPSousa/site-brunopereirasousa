@@ -211,3 +211,20 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
  body:not(.shell)>.bar #exportPdf,
  body:not(.shell)>.bar #exportPng{display:none!important}
 }
+
+/* Leitura simplificada da grelha em ecrãs estreitos. */
+@media(max-width:800px){
+ body:not(.shell)>.bar{flex-wrap:nowrap!important;gap:8px;padding:8px 10px;overflow:hidden}
+ body:not(.shell)>.bar #count{white-space:nowrap;flex:0 0 auto;font-size:12px}
+ body:not(.shell)>.bar .section-legend{flex:1 1 auto;min-width:0;max-width:none;flex-wrap:nowrap;gap:3px;overflow-x:auto;justify-content:flex-end}
+ body:not(.shell)>.bar .section-key{flex:0 0 auto;min-width:21px;height:20px;font-size:8px}
+ body:not(.shell) .dayhead{padding:9px 8px}
+ body:not(.shell) .dayhead strong{font-size:16px}
+ body:not(.shell) .dayhead span{font-size:12px}
+ body:not(.shell) .tick-minor{display:none!important}
+ body:not(.shell) .tick:not(.tick-minor){font-size:12px}
+ body:not(.shell) .session .time{font-size:12px!important}
+ body:not(.shell) .session .title{font-size:15px!important;line-height:1.15!important}
+ body:not(.shell) .session .presentation,
+ body:not(.shell) .session .category{display:none!important}
+}
