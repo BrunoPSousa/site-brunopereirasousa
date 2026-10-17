@@ -184,3 +184,22 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
 /* Seis salas: manter a navegação legível sem sobrepor o título. */
 @media(min-width:951px) and (max-width:1200px){.shell nav{padding-inline:12px}.shell nav .brand-name{font-size:17px}.shell nav .brand-bird{flex-basis:36px;width:36px;height:43px;background-size:108px auto}.shell nav .shell-title{font-size:20px}.shell nav .room-buttons button{padding:8px 9px;font-size:13px}}
 @media(min-width:801px) and (max-width:950px){.shell nav{grid-template-columns:minmax(0,1fr) auto;min-height:96px}.shell nav .shell-title{grid-column:1/-1;grid-row:2}.shell nav .room-buttons{grid-column:2;grid-row:1}.shell nav .room-buttons button{padding:8px 8px;font-size:12px}}
+
+
+/* Navegação compacta em ecrãs estreitos: passarinho à esquerda, salas à direita. */
+@media(max-width:800px){
+ .shell nav{grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr;gap:6px;padding:5px 12px;min-height:62px}
+ .shell nav .brand{grid-column:1;grid-row:1;gap:0}
+ .shell nav .brand-name,.shell nav .shell-title{display:none!important}
+ .shell nav .brand-bird{flex-basis:36px;width:36px;height:43px;background-size:108px auto}
+ .shell nav .room-buttons,.shell nav .day-buttons{grid-column:2;grid-row:1;min-width:0;max-width:none;flex-wrap:nowrap;justify-self:end;gap:4px;overflow-x:auto}
+ .shell nav .room-buttons button{padding:7px 7px;font-size:11px}
+ .shell nav:has(.day-buttons:not([hidden])){min-height:62px}
+}
+@media(max-width:480px){
+ .shell nav{padding:5px 8px;min-height:52px;gap:4px}
+ .shell nav .brand-bird{flex-basis:27px;width:27px;height:33px;background-size:81px auto}
+ .shell nav .room-buttons,.shell nav .day-buttons{gap:3px}
+ .shell nav .room-buttons button,.shell nav .day-buttons button{padding:6px 4px;font-size:9px}
+ .shell nav .day-buttons button{white-space:nowrap}
+}
