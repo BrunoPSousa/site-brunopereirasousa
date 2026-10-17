@@ -203,3 +203,11 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
  .shell nav .room-buttons button,.shell nav .day-buttons button{padding:6px 4px;font-size:9px}
  .shell nav .day-buttons button{white-space:nowrap}
 }
+
+/* Em ecrãs estreitos, a grelha fica apenas para consulta. */
+@media(max-width:800px){
+ body:not(.shell)>.bar label:has(#zoom),
+ body:not(.shell)>.bar #editMode,
+ body:not(.shell)>.bar #exportPdf,
+ body:not(.shell)>.bar #exportPng{display:none!important}
+}
