@@ -158,7 +158,7 @@ body:not(.shell)>header{display:none}
 .daily-view .corner,.daily-view .dayhead,.daily-view .axis{display:none!important}
 .daily-view .lane{width:100%!important;min-width:0!important}
 .daily-view .toast{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);z-index:50}
-@media(max-width:900px){.daily-calendar{grid-template-columns:54px repeat(6,minmax(190px,1fr));width:max(100%,900px)}.daily-room>header{height:56px;min-height:56px;display:block}.daily-room>header strong{display:block;margin-bottom:4px}.daily-room>header div{justify-content:flex-start}.daily-room>header button{font-size:9px;padding:4px}}
+@media(max-width:900px){.daily-calendar{grid-template-columns:54px repeat(6,minmax(190px,1fr));width:max(100%,900px)}}
 .daily-room iframe{height:calc(1488px * var(--daily-scale,1))}
 .daily-view .view{height:1488px!important;min-height:1488px!important}
 .shell nav .shell-title span{font:inherit;letter-spacing:inherit}
