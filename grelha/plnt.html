@@ -85,7 +85,7 @@ $('zoom').onchange=()=>{const v=$('view'),ratio=Number($('zoom').value)/zoom;zoo
 if(dailyMode){document.querySelector('.bar').hidden=true;window.addEventListener('message',event=>{if(event.origin!==location.origin)return;const m=event.data||{};if(m.type==='room-edit')setEditMode(!!m.value);if(m.type==='room-add'&&editMode)openNewSession();if(m.type==='room-export')exportPdf();if(m.type==='room-zoom'&&["0.528","0.72"].includes(String(m.value))){$('zoom').value=String(m.value);$('zoom').onchange();}});}
 function edit(id){
  const s=sessions.find(s=>s.id===id);if(!s)return;selected=id;
- $('editTitle').textContent=title(s);$('editCategory').textContent=s.name;$('editCategory').hidden=!!s.club;
+ $('editTitle').textContent=title(s);$('editCategory').textContent=s.name;$('editCategory').style.color=sectionColor(s.name);$('editCategory').hidden=!!s.club;
  $('sessionWhen').textContent=`${s.day} novembro · ${time(s.start)} → ${time(s.start+total(s))}`;$('clubStatus').hidden=!s.club;
  renderEventSummary(s,!!s.club);
  $('durationNote').hidden=!!s.club;$('durationNote').textContent=s.estimated?'Duração estimada do programa.':'';
