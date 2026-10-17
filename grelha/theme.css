@@ -228,3 +228,7 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
  body:not(.shell) .session .presentation,
  body:not(.shell) .session .category{display:none!important}
 }
+
+
+/* Reserva espaço para a etiqueta EVENTO no cabeçalho do popup. */
+#editor:has(#clubStatus:not([hidden])) #editTitle{padding-right:100px}
