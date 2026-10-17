@@ -144,11 +144,12 @@ body:not(.shell)>header{display:none}
 .day-toolbar{height:45px;display:flex;align-items:center;gap:18px;padding:5px 16px;font-size:12px;font-weight:700;text-transform:uppercase;flex-shrink:0}
 .day-toolbar select{padding:6px;font-weight:700}
 .daily-calendar{display:grid;grid-template-columns:66px repeat(6,minmax(200px,1fr));min-width:100%;align-items:start;border-top:1px solid #aaa;border-left:1px solid #aaa;overflow:visible}
-.daily-axis{position:relative;height:1534px;padding-top:46px;border-right:1px solid #aaa;background:linear-gradient(#f4f4f4 0 46px,transparent 46px),repeating-linear-gradient(to bottom,transparent 0,transparent 23px,#d4d4d4 23px,#d4d4d4 24px);background-position:0 0,0 46px;background-size:100% 100%,100% 24px;background-repeat:no-repeat,repeat-y}
+
+.daily-axis{position:relative;height:1488px;padding-top:46px;border-right:1px solid #aaa;background:linear-gradient(#f4f4f4 0 46px,transparent 46px),repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--daily-quarter,24px) - 1px),#d4d4d4 calc(var(--daily-quarter,24px) - 1px),#d4d4d4 var(--daily-quarter,24px));background-position:0 0,0 46px;background-size:100% 100%,100% var(--daily-quarter,24px);background-repeat:no-repeat,repeat-y}
 .daily-tick{position:absolute;right:5px;transform:translateY(-50%);font-size:10px;color:#555;white-space:nowrap;font-variant-numeric:tabular-nums}.daily-tick:not(.minor){font-weight:700;font-size:11px}.daily-tick.minor{font-size:9px;color:#777}
 .daily-room{min-width:0;border-right:1px solid #aaa}
-.daily-room>header{height:46px;min-height:46px;padding:5px 7px;display:flex;align-items:center;justify-content:space-between;gap:3px;background:#f4f4f4;border-bottom:1px solid #aaa;overflow:hidden}
-.daily-room>header strong{font-size:14px}.daily-room>header div{display:flex;gap:3px}.daily-room>header button{padding:5px 6px;font-size:10px;font-weight:700;white-space:nowrap}
+.daily-room>header{box-sizing:border-box;height:46px;min-height:46px;padding:5px 7px;display:flex;align-items:center;justify-content:center;text-align:center;gap:3px;background:#f4f4f4;border-bottom:1px solid #aaa;overflow:hidden}
+.daily-room>header strong{font-size:11px;line-height:1.15;max-width:100%}.daily-room>header div{display:flex;gap:3px}.daily-room>header button{padding:5px 6px;font-size:10px;font-weight:700;white-space:nowrap}
 .daily-room>header button[aria-pressed=true]{background:#111;color:#fff}
 .daily-room iframe{display:block;width:100%;height:1488px;border:0;overflow:hidden}
 .daily-view body:not(.shell){height:auto!important;display:block!important;overflow:visible!important}
