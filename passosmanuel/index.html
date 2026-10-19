@@ -1,0 +1,15 @@
+<!doctype html><html lang="pt"><head><base href="/grelha/"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>PPD26 - Passos Manuel</title><link rel="icon" href="favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png"><link rel="icon" type="image/png" sizes="512x512" href="favicon.png"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"><meta name="theme-color" content="#ff3eb5"><link rel="stylesheet" href="theme.css?v=20261017-compact-mobile-header"></head><body class="shell"><nav aria-label="Navegação da grelha"><div class="brand"><span class="brand-name">Porto/Post/Doc 2026</span><span class="brand-bird" role="img" aria-label="Pássaro da edição 2026 do Porto/Post/Doc"></span></div><div class="shell-title">GRELHA <span>POR SALA</span></div><div class="room-buttons" id="roomButtons"><button data-room="passos">PM</button></div></nav><iframe id="map" title="Mapa de sessões"></iframe><script>
+const rooms=['passos'],frame=document.getElementById('map');
+function chooseRoom(room){
+ const selected=rooms.includes(room)?room:rooms[0];
+ document.querySelectorAll('[data-room]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.room===selected)));
+ frame.style.visibility='hidden';
+ frame.src=selected+'.html?readonly=1&v=20261019-partners';
+ frame.title='Mapa '+(selected==='passos'?'PM':selected==='bcchl'?'BCC HL':selected.toUpperCase());
+ history.replaceState(null,'',location.pathname+location.search+'#'+selected);
+}
+frame.addEventListener('load',()=>{frame.style.visibility='visible';});
+document.querySelectorAll('[data-room]').forEach(button=>button.onclick=()=>chooseRoom(button.dataset.room));
+window.addEventListener('hashchange',()=>chooseRoom(location.hash.slice(1)));
+chooseRoom(location.hash.slice(1));
+</script></body></html>
