@@ -233,3 +233,29 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
 
 /* Reserva espaço para a etiqueta EVENTO no cabeçalho do popup. */
 #editor:has(#clubStatus:not([hidden])) #editTitle{padding-right:100px}
+
+/* O título acompanha a identidade visual, logo à direita do passarinho. */
+@font-face{
+ font-family:"Graphik Super Web";
+ src:local("Graphik-Super"),local("Graphik Super"),url("graphik-super-webfont.woff") format("woff");
+ font-style:normal;
+ font-weight:900;
+}
+@media(min-width:801px){
+ .shell nav{grid-template-columns:max-content max-content minmax(0,1fr);column-gap:8px}
+ .shell nav .brand{grid-column:1;grid-row:1}
+ .shell nav .shell-title{
+  grid-column:2;grid-row:1;justify-self:start;margin-left:14px;
+  font-family:"Graphik Super Web",Arial,sans-serif;
+  font-size:clamp(16px,1.7vw,21px);font-weight:900;
+  letter-spacing:-.6px;text-align:left;
+ }
+ .shell nav .room-buttons,.shell nav .day-buttons{grid-column:3;grid-row:1;justify-self:end}
+}
+@media(min-width:801px) and (max-width:950px){
+ .shell nav{min-height:68px}
+ .shell nav .brand-name{font-size:15px}
+ .shell nav .shell-title{font-size:16px;margin-left:10px}
+ .shell nav .room-buttons{gap:3px}
+ .shell nav .room-buttons button{padding:7px 5px;font-size:11px}
+}
