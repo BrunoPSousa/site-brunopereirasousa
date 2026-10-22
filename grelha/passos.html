@@ -72,7 +72,7 @@ if(qa(s)){const qaText=document.createElement('span');qaText.className='qa-text'
 
  for(let i=1;i<groups.length;i++){
   const from=groups[i-1].end,to=groups[i].items[0].start,minutes=to-from;
-  if(minutes<=0||minutes>120||to<=minTime||from>=maxTime)continue;
+  if(minutes<=0||minutes>60||to<=minTime||from>=maxTime)continue;
   const gap=document.createElement('div');gap.className='session-gap';gap.dataset.minutes=minutes;
   const visibleFrom=Math.max(from,minTime),visibleTo=Math.min(to,maxTime);
   gap.style.top=((visibleFrom+visibleTo)/2-minTime)*1.6+'px';
