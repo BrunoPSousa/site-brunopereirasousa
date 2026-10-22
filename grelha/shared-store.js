@@ -3,7 +3,7 @@ import {getFirestore,collection,doc,onSnapshot,runTransaction,serverTimestamp} f
 import {firebaseConfig} from './firebase-config.js';
 
 const db=getFirestore(initializeApp(firebaseConfig));
-const rooms=new Set(['bcc1','bcc2','bcchl','tmmcn','plnt','passos']);
+const rooms=new Set(['bcc1','bcc2','bcchl','tmmcn','plnt','passos','braga']);
 
 function cleanText(value,max){return typeof value==='string'&&value.trim().length<=max?value.trim():'';}
 function readFilms(value){
