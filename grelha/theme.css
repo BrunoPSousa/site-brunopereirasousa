@@ -210,6 +210,7 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
  body:not(.shell)>.bar label:has(#zoom),
  body:not(.shell)>.bar #editMode,
  body:not(.shell)>.bar #exportPdf,
+ body:not(.shell)>.bar #exportDetailsPdf,
  body:not(.shell)>.bar #exportPng{display:none!important}
 }
 
