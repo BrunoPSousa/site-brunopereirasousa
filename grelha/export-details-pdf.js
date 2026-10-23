@@ -9,9 +9,11 @@ const pdfColor=value=>{const n=parseInt(value.replace('#',''),16);return `${((n>
 export function reportBlocks(sessions,roomName){
  return [...sessions].sort((a,b)=>a.day-b.day||a.start-b.start||(a.sessionTitle||'').localeCompare(b.sessionTitle||'','pt')).map(s=>{
   const intro=s.club?0:(s.presentationMinutes||0),qa=s.club?0:(s.qaMinutes||0),total=s.duration+intro+qa;
-  const rows=[{runs:[{text:s.club?'Evento':'Cinema',bold:true},{text:` · ${s.generalPublic===false?'Público específico':'Público Geral'}`}]}];
-  if(s.name)rows.push({runs:[{text:'Secção: ',bold:true},{text:s.name,color:pdfColor(sectionColor(s.name))}]});
-  if(!s.club){rows.push({runs:[{text:`Apresentação: ${minutes(intro)}`,bold:true}]});if(s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});rows.push({runs:[{text:'Filmes:',bold:true}]});for(const [name,duration]of s.films||[])rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`}]});}
+  const sessionType=s.club?'Evento':'Cinema',audience=s.generalPublic===false?'Público específico':'Público Geral';
+  const typeLine=[{text:sessionType},{text:` · ${audience}`}];
+  if(s.name)typeLine.push({text:` · ${s.name}`,color:pdfColor(sectionColor(s.name))});
+  const rows=[{runs:typeLine}];
+  if(!s.club){rows.push({runs:[{text:`Apresentação: ${minutes(intro)}`,bold:true},...(s.presenter?[{text:` (${s.presenter})`}]:[])]});rows.push({runs:[{text:'Filmes:',bold:true}]});for(const [name,duration]of s.films||[])rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`}]});}
   if(qa)rows.push({runs:[{text:'Q&A: ',bold:true},{text:(s.qaNames?.length?s.qaNames:[s.qaName]).filter(Boolean).join(', ')||'Participantes por confirmar'},{text:` — ${minutes(qa)}`}]});
   rows.push({runs:[{text:`Duração total: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
   if(s.club&&s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});
