@@ -13,9 +13,14 @@ export function reportBlocks(sessions,roomName){
   const typeLine=[{text:sessionType},{text:` · ${audience}`}];
   if(s.name)typeLine.push({text:` · ${s.name}`,color:pdfColor(sectionColor(s.name))});
   const rows=[{runs:typeLine}];
-  if(!s.club){rows.push({runs:[{text:`Apresentação: ${minutes(intro)}`,bold:true},...(s.presenter?[{text:` (${s.presenter})`}]:[])]});rows.push({runs:[{text:'Filmes:',bold:true}]});for(const [name,duration]of s.films||[])rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`}]});}
-  if(qa)rows.push({runs:[{text:'Q&A: ',bold:true},{text:(s.qaNames?.length?s.qaNames:[s.qaName]).filter(Boolean).join(', ')||'Participantes por confirmar'},{text:` — ${minutes(qa)}`}]});
-  rows.push({runs:[{text:`Duração total: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
+  if(!s.club){
+   const qaNames=(s.qaNames?.length?s.qaNames:[s.qaName]).filter(Boolean).join(', ');
+   rows.push({runs:[{text:`Apresentação: ${intro?minutes(intro):'não'}`,bold:true},...(intro&&s.presenter?[{text:` (com ${s.presenter})`}]:[])]});
+   rows.push({runs:[{text:`Filmes (${(s.films||[]).length}):`,bold:true}]});
+   for(const [name,duration]of s.films||[])rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`}]});
+   rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}${qa&&qaNames?` (com ${qaNames})`:''}`,bold:true}]});
+  }
+  rows.push({runs:[{text:`Duração total da sessão: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
   if(s.club&&s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});
   if(s.notes?.trim())rows.push({runs:[{text:'Detalhes: ',bold:true},{text:s.notes.trim()}]});
   return {day:s.day,heading:s.sessionTitle||'Sem título',metadata:`${s.day} nov. · ${clock(s.start)}–${clock(s.start+total)} · ${roomName}`,rows};
