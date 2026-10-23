@@ -47,7 +47,7 @@ body.zoom-small .session .title{font-size:11px!important;line-height:1.15!import
 #qaEditor{border-top:1px solid #ddd;margin-top:16px;padding-top:14px}#qaEditor p{margin:0 0 10px}#qaNameWrap{font-weight:700;font-size:13px}#qaName{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:8px}.qa-editor-actions{margin-top:10px;gap:8px}
 #sessionEditor{border-top:1px solid #ddd;margin-top:16px;padding-top:14px}#sessionEditor>label{display:block;font-weight:700;font-size:13px;margin:10px 0}.film-fields{display:grid;gap:7px;margin:12px 0}.film-row{display:grid;grid-template-columns:minmax(0,1fr) 86px auto;gap:7px}.film-row input{min-width:0}.film-row button{padding:7px 9px;font-size:12px}@media(max-width:480px){.film-row{grid-template-columns:minmax(0,1fr) 68px}.film-row button{grid-column:1/-1;justify-self:start}}
 /* Campos de edição alinhados à largura do conteúdo do diálogo. */
-#sessionEditor>label:has(#sessionTitle),#sessionEditor>label:has(#sessionSection){display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:12px}
+#sessionEditor>label:has(#sessionTitle),#sessionEditor>label:has(#sessionSection){display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:12px}#sessionEditor>label:has(#presenter){display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:12px}
 #sessionTitle,#sessionSection{width:100%;min-width:0;box-sizing:border-box}
 #sessionEditor .film-row,#presentationWrap{grid-template-columns:minmax(0,1fr) 86px 70px;gap:7px}
 #sessionEditor>label#presentationWrap{display:grid;align-items:center}

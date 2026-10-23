@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function validRoom(room) {
+      return room == 'bcc1' || room == 'bcc2' || room == 'bcchl'
+        || room == 'tmmcn' || room == 'plnt' || room == 'passos' || room == 'braga';
+    }
+    // Preserva o acesso actual das outras áreas do site.
+    match /{topCollection}/{document=**} {
+      allow read, write: if topCollection != 'festivalGrids2026'
+        && topCollection != 'festivalGridQa2026'
+        && topCollection != 'festivalGridCurrent2026';
+    }
+    match /festivalGrids2026/{room}/sessions/{sessionId} {
+      allow read: if validRoom(room);
+      allow write: if false;
+    }
+    match /festivalGridQa2026/{room}/sessions/{sessionId} {
+      // Coleção anterior: leitura para páginas antigas ainda abertas, mas sem novas edições.
+      allow read: if validRoom(room);
+      allow write: if false;
+    }
+    match /festivalGridCurrent2026/{room}/sessions/{sessionId} {
+      function validData() {
+        let s = request.resource.data;
+        return s.keys().hasAll(['id','day','start','duration','sessionTitle','section',
+          'films','presentationMinutes','qaNames','qaMinutes','notes','type',
+          'generalPublic','estimated','revision','updatedAt'])
+          && s.keys().hasOnly(['id','day','start','duration','sessionTitle','section',
+          'films','presentationMinutes','qaNames','qaMinutes','notes','type',
+          'generalPublic','estimated','revision','updatedAt','code','presenter'])
+          && s.id == sessionId
+          && s.day is int && s.day >= 19 && s.day <= 28
+          && s.start is int && s.start >= 0 && s.start < 1800
+          && s.duration is int && s.duration >= 1 && s.duration <= 720
+          && s.sessionTitle is string && s.sessionTitle.size() > 0 && s.sessionTitle.size() <= 160
+          && s.section is string && s.section.size() > 0 && s.section.size() <= 160
+          && s.films is list && s.films.size() <= 50
+          && s.presentationMinutes is int && s.presentationMinutes >= 0 && s.presentationMinutes <= 120
+          && s.qaNames is list && s.qaNames.size() <= 20
+          && s.qaMinutes is int && s.qaMinutes >= 0 && s.qaMinutes <= 120
+          && ((s.qaNames.size() == 0 && s.qaMinutes == 0)
+            || (s.qaNames.size() > 0 && s.qaMinutes > 0))
+          && s.notes is string && s.notes.size() <= 500
+          && (!('presenter' in s) || (s.presenter is string && s.presenter.size() <= 160))
+          && (s.type == 'cinema' || s.type == 'event')
+          && (s.type != 'event' || (s.presentationMinutes == 0 && s.qaMinutes == 0))
+          && s.generalPublic is bool && s.estimated is bool
+          && s.revision is int && s.revision >= 0
+          && (!('code' in s) || (s.code is string && s.code.size() <= 40))
+          && s.updatedAt == request.time;
+      }
+      allow read: if validRoom(room);
+      allow create: if validRoom(room) && validData() && request.resource.data.revision == 0;
+      allow update: if validRoom(room) && validData()
+        && request.resource.data.revision == resource.data.revision + 1;
+      allow delete: if false;
+    }
+  }
+}

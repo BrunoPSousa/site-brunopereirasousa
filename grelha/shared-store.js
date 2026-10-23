@@ -28,7 +28,8 @@ function decode(id,value){
   !Number.isInteger(value.revision)||value.revision<0||
   !cleanText(value.sessionTitle,160)||!cleanText(value.section,160)||
   !['cinema','event'].includes(value.type)||typeof value.generalPublic!=='boolean'||
-  typeof value.estimated!=='boolean'||typeof value.notes!=='string'||value.notes.length>500)
+  typeof value.estimated!=='boolean'||typeof value.notes!=='string'||value.notes.length>500||
+  (value.presenter!==undefined&&(typeof value.presenter!=='string'||value.presenter.length>160)))
   throw Error(`Dados inválidos na sessão ${id}.`);
  const films=readFilms(value.films),qaNames=readQaNames(value.qaNames);
  if(value.type==='cinema'&&films.length&&films.reduce((sum,[,minutes])=>sum+minutes,0)!==value.duration)
@@ -39,16 +40,16 @@ function decode(id,value){
  return {id,day:value.day,start:value.start,duration:value.duration,
   sessionTitle:value.sessionTitle,name:value.section,films,
   presentationMinutes:value.presentationMinutes,qaNames,qaName:qaNames.join(', '),qaMinutes:value.qaMinutes,
-  notes:value.notes,club:value.type==='event',generalPublic:value.generalPublic,
+  notes:value.notes,presenter:cleanText(value.presenter,160),club:value.type==='event',generalPublic:value.generalPublic,
   estimated:value.estimated,code:cleanText(value.code,40),_rev:value.revision};
 }
 function encode(before,after){
  const sessionTitle=cleanText(after.sessionTitle,160),section=cleanText(after.name,160);
- const notes=cleanText(after.notes,500),films=readFilms(after.films);
+ const notes=cleanText(after.notes,500),presenter=cleanText(after.presenter,160),films=readFilms(after.films);
  const club=after.club===true;
  const duration=before?after.duration:films.reduce((sum,[,minutes])=>sum+minutes,0);
  const presentationMinutes=club?0:after.presentationMinutes;
- if(typeof after.notes!=='string'||after.notes.trim().length>500||
+ if(typeof after.notes!=='string'||after.notes.trim().length>500||typeof after.presenter!=='string'||after.presenter.trim().length>160||
   (!club&&typeof after.qaName==='string'&&after.qaName.trim().length>160)||
   !sessionTitle||!section||!Number.isInteger(after.day)||after.day<19||after.day>28||
   !Number.isInteger(after.start)||after.start<0||after.start>=1800||
@@ -62,7 +63,7 @@ function encode(before,after){
  const qaMinutes=club?0:before&&qaText===before.qaName?before.qaMinutes:qaNames.length?20:0;
  const storedFilms=films.map(([title,minutes])=>({title,minutes}));
  return {id:after.id,day:after.day,start:after.start,duration,sessionTitle,section,
-  films:storedFilms,presentationMinutes,qaNames,qaMinutes,notes,type:club?'event':'cinema',
+  films:storedFilms,presentationMinutes,qaNames,qaMinutes,notes,presenter,type:club?'event':'cinema',
   generalPublic:after.generalPublic!==false,estimated:!!before?.estimated&&!films.length,
   revision:before?before._rev+1:0,...(after.code?{code:cleanText(after.code,40)}:{}),updatedAt:serverTimestamp()};
 }
