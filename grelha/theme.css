@@ -270,3 +270,11 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
  body:not(.shell)>.bar .schedule-filters{flex:1 1 auto;gap:8px}
  body:not(.shell)>.bar .schedule-filters .section-legend{width:auto;order:initial;justify-content:flex-start}
 }
+
+/* Cada secção tem um controlo de exclusão independente por cima. */
+.section-filter-group{display:inline-grid;grid-template-columns:1fr;gap:3px;flex:0 0 auto}
+.section-filter-group .section-key{width:100%}
+.section-exclude{display:flex;align-items:center;justify-content:center;width:100%;height:12px;min-height:0;padding:0;border:0;border-radius:0;background:#d3d3d3;color:#444;font-size:13px;font-weight:700;line-height:1;cursor:pointer}
+.section-exclude:hover{background:#bcbcbc}
+.section-exclude[aria-pressed="true"]{background:#c92a36;color:#fff}
+.section-exclude[aria-pressed="true"]:hover{background:#ad202c}
