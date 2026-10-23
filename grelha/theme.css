@@ -36,7 +36,7 @@ header{background:#ff3eb5}
 .zoom-small .film-content{padding:3px 6px}
 .zoom-small .qa-text{font-size:9px;line-height:10px;padding:1px 6px}
 .session-when{font-weight:700;margin:18px 0}
-.films .event-heading{font-weight:700}.films .film-detail{padding-left:14px;color:#555;font-size:13px}.films .event-heading small{font-weight:700}#qaDetails:empty,#durationNote:empty{display:none}
+.films .event-heading{font-weight:700}.films .event-heading .presenter-name{font-weight:400}.films .film-detail{padding-left:14px;color:#555;font-size:13px}.films .event-heading small{font-weight:700}#qaDetails:empty,#durationNote:empty{display:none}
 
 .zoom-small .session.compact .presentation,.zoom-small .session.compact .category,.zoom-small .session.compact .qa-text,.zoom-small .session.compact .estimate-icon{display:none}
 /* Safari pode manter o tamanho de texto dentro de elementos com zoom. */
