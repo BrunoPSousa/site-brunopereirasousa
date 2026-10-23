@@ -25,7 +25,7 @@ service cloud.firestore {
         let s = request.resource.data;
         return s.keys().hasAll(['id','day','start','duration','sessionTitle','section',
           'films','presentationMinutes','qaNames','qaMinutes','notes','type',
-          'generalPublic','estimated','revision','updatedAt'])
+          'generalPublic','estimated','revision','updatedAt','code','presenter'])
           && s.keys().hasOnly(['id','day','start','duration','sessionTitle','section',
           'films','presentationMinutes','qaNames','qaMinutes','notes','type',
           'generalPublic','estimated','revision','updatedAt','code','presenter'])
@@ -42,12 +42,12 @@ service cloud.firestore {
           && ((s.qaNames.size() == 0 && s.qaMinutes == 0)
             || (s.qaNames.size() > 0 && s.qaMinutes > 0))
           && s.notes is string && s.notes.size() <= 500
-          && (!('presenter' in s) || (s.presenter is string && s.presenter.size() <= 160))
+          && s.presenter is string && s.presenter.size() <= 160
           && (s.type == 'cinema' || s.type == 'event')
           && (s.type != 'event' || (s.presentationMinutes == 0 && s.qaMinutes == 0))
           && s.generalPublic is bool && s.estimated is bool
           && s.revision is int && s.revision >= 0
-          && (!('code' in s) || (s.code is string && s.code.size() <= 40))
+          && s.code is string && s.code.size() > 0 && s.code.size() <= 40
           && s.updatedAt == request.time;
       }
       allow read: if validRoom(room);
