@@ -43,7 +43,7 @@ function decode(id,value){
   notes:value.notes,presenter:cleanText(value.presenter,160),club:value.type==='event',generalPublic:value.generalPublic,
   estimated:value.estimated,code:cleanText(value.code,40),_rev:value.revision};
 }
-function encode(before,after){
+function encode(before,after,room){
  const sessionTitle=cleanText(after.sessionTitle,160),section=cleanText(after.name,160);
  const notes=cleanText(after.notes,500),presenter=cleanText(after.presenter,160),films=readFilms(after.films);
  const club=after.club===true;
@@ -65,7 +65,7 @@ function encode(before,after){
  return {id:after.id,day:after.day,start:after.start,duration,sessionTitle,section,
   films:storedFilms,presentationMinutes,qaNames,qaMinutes,notes,presenter,type:club?'event':'cinema',
   generalPublic:after.generalPublic!==false,estimated:!!before?.estimated&&!films.length,
-  revision:before?before._rev+1:0,...(after.code?{code:cleanText(after.code,40)}:{}),updatedAt:serverTimestamp()};
+  revision:before?before._rev+1:0,code:cleanText(after.code,40)||room,updatedAt:serverTimestamp()};
 }
 
 export function connectRoom(room,onChange,onStatus){
@@ -88,7 +88,7 @@ export function connectRoom(room,onChange,onStatus){
    if(!ready||!navigator.onLine)throw Error('Sem ligação ao servidor. A sessão não foi guardada.');
    const id='added-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
    const after={...data,id};
-   const stored=encode(null,after);
+   const stored=encode(null,after,room);
    const reference=doc(records,id);
    await runTransaction(db,async transaction=>{
     if((await transaction.get(reference)).exists())throw Error('Identificador já utilizado. Tenta novamente.');
@@ -99,7 +99,7 @@ export function connectRoom(room,onChange,onStatus){
   async save(before,after){
    if(!ready||!navigator.onLine)throw Error('Sem ligação ao servidor. A alteração não foi guardada.');
    if(before.id!==after.id)throw Error('Identificador da sessão inválido.');
-   const stored=encode(before,after),reference=doc(records,before.id);
+   const stored=encode(before,after,room),reference=doc(records,before.id);
    await runTransaction(db,async transaction=>{
     const snapshot=await transaction.get(reference);
     if(!snapshot.exists())throw Error('Esta sessão já não está disponível.');
