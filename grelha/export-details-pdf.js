@@ -18,7 +18,7 @@ export function reportBlocks(sessions,roomName){
    rows.push({runs:[{text:`Apresentação: ${intro?minutes(intro):'não'}`,bold:true},...(intro&&s.presenter?[{text:` (com ${s.presenter})`}]:[])]});
    rows.push({runs:[{text:`Filmes (${(s.films||[]).length}):`,bold:true}]});
    for(const [name,duration]of s.films||[])rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`}]});
-   rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}${qa&&qaNames?` (com ${qaNames})`:''}`,bold:true}]});
+   rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(qa&&qaNames?[{text:` (com ${qaNames})`}]:[])]});
   }
   rows.push({runs:[{text:`Duração total da sessão: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
   if(s.club&&s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});
