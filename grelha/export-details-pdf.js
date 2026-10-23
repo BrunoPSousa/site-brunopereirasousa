@@ -27,7 +27,7 @@ export function reportBlocks(sessions,roomName){
  });
 }
 export function buildDetailsPdf({sessions,roomName,filterLabel='',measureText,exportedAt=new Date()}){
- const pages=[];let page,y;
+ const pages=[];let page,y,pageScale=1;
  const lineText=runs=>{
   let x=M,out='BT\n';
   for(const run of runs){const font=run.italic?(run.bold?'F4':'F3'):(run.bold?'F2':'F1'),size=run.size||10,color=run.color||'0.12 0.12 0.12';out+=`/${font} ${size} Tf ${color} rg 1 0 0 1 ${x.toFixed(2)} ${(H-y).toFixed(2)} Tm <${hex(run.text)}> Tj\n`;x+=measureText(run.text,size,!!run.bold,!!run.italic);}
@@ -42,20 +42,25 @@ export function buildDetailsPdf({sessions,roomName,filterLabel='',measureText,ex
     if(candidate){line.push({...run,text:candidate});width+=measureText(candidate,size,!!run.bold,!!run.italic);}
   }}flush();return lines;
  };
- const newPage=day=>{page=[];pages.push(page);y=38;page.push(lineText([{text:'PORTO/POST/DOC 2026 · DETALHES DAS SESSÕES',size:9,bold:true}]));y=58;page.push(lineText([{text:roomName,size:10,bold:true},{text:`   ·   ${day} novembro 2026`,size:10,color:'0.30 0.39 0.48'}]));y=74;page.push(`0.85 G ${M} ${H-y} m ${W-M} ${H-y} l S\n`);y=92;};
- const add=(runs,size=10)=>{runs=runs.map(r=>({...r,size:r.size||size}));for(const line of wrapRuns(runs)){if(y+size*1.4>BOTTOM)throw new Error('As sessões deste dia excedem o espaço disponível numa página.');page.push(lineText(line));y+=size*1.4;}};
+ const newPage=day=>{page=[];y=38;page.push(lineText([{text:'PORTO/POST/DOC 2026 · DETALHES DAS SESSÕES',size:9,bold:true}]));y=58;page.push(lineText([{text:roomName,size:10,bold:true},{text:`   ·   ${day} novembro 2026`,size:10,color:'0.30 0.39 0.48'}]));y=74;page.push(`0.85 G ${M} ${H-y} m ${W-M} ${H-y} l S\n`);y=92;};
+ const add=(runs,size=10)=>{runs=runs.map(r=>({...r,size:(r.size||size)*pageScale}));for(const line of wrapRuns(runs)){page.push(lineText(line));y+=size*pageScale*1.4;}};
  const blocks=reportBlocks(sessions,roomName),byDay=new Map();for(const b of blocks){if(!byDay.has(b.day))byDay.set(b.day,[]);byDay.get(b.day).push(b);}
  for(let day=19;day<=28;day++){
-  newPage(day);const today=byDay.get(day)||[];
-  add([{text:`${today.length} ${today.length===1?'sessão':'sessões'}`,bold:true},{text:' · Ordem cronológica',color:'0.30 0.39 0.48'}],9);
-  if(filterLabel)add([{text:'Filtros: ',bold:true},{text:filterLabel,color:'0.30 0.39 0.48'}],8);
-  y+=10;
-  if(!today.length)add([{text:'Sem sessões correspondentes aos filtros neste dia.',color:'0.30 0.39 0.48'}],10);
-  for(const block of today){
-   add([{text:block.heading,size:13,bold:true},{text:'   '},{text:block.metadata,size:9,color:'0.30 0.39 0.48'}],13);
-   for(const row of block.rows)add(row.runs,10);
-   y+=9;page.push(`0.85 G ${M} ${H-y} m ${W-M} ${H-y} l S\n`);y+=17;
+  const today=byDay.get(day)||[];
+  for(pageScale=1;pageScale>=0.6;pageScale=Math.round((pageScale-0.05)*100)/100){
+   newPage(day);
+   add([{text:`${today.length} ${today.length===1?'sessão':'sessões'}`,bold:true},{text:' · Ordem cronológica',color:'0.30 0.39 0.48'}],9);
+   if(filterLabel)add([{text:'Filtros: ',bold:true},{text:filterLabel,color:'0.30 0.39 0.48'}],8);
+   y+=10*pageScale;
+   if(!today.length)add([{text:'Sem sessões correspondentes aos filtros neste dia.',color:'0.30 0.39 0.48'}],10);
+   for(const block of today){
+    add([{text:block.heading,size:13,bold:true},{text:'   '},{text:block.metadata,size:9,color:'0.30 0.39 0.48'}],13);
+    for(const row of block.rows)add(row.runs,10);
+    y+=9*pageScale;page.push(`0.85 G ${M} ${H-y} m ${W-M} ${H-y} l S\n`);y+=17*pageScale;
+   }
+   if(y<=BOTTOM){pages.push(page);break;}
   }
+  if(y>BOTTOM)throw new Error(`As sessões de ${day} novembro excedem o espaço disponível numa página.`);
  }
  pages.forEach((p,i)=>{y=H-26;p.push(lineText([{text:`${roomName} · ${i+1} / ${pages.length}`,size:8,color:'0.4 0.4 0.4'}]));});
  const objects=['<< /Type /Catalog /Pages 2 0 R >>',`<< /Type /Pages /Count ${pages.length} /Kids [${pages.map((_,i)=>`${7+i*2} 0 R`).join(' ')}] >>`,'<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding >>','<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-BoldOblique /Encoding /WinAnsiEncoding >>'];
