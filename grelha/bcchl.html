@@ -20,7 +20,7 @@ const days=['quarta','quinta','sexta','sábado','domingo','segunda','terça','qu
 const dailyParams=new URLSearchParams(location.search),dailyMode=dailyParams.get('daily')==='1',dailyDay=Math.max(19,Math.min(28,Number(dailyParams.get('day'))||19));if(dailyMode)document.body.classList.add('daily-view');
 const readOnlyMode=dailyParams.get('readonly')==='1';
 if(readOnlyMode){document.body.classList.add('partner-readonly');$('editMode').hidden=true;$('newSessionButton').hidden=true;}
-let sessions=[],selected=null,drag=null,minTime=600,maxTime=1455,toastTimer,zoom=.72,editMode=false;
+let sessions=[],selected=null,drag=null,minTime=660,maxTime=1380,toastTimer,zoom=.72,editMode=false;
 // Apenas nomes, filmes e janelas de presença necessários ao programa.
 const presentation=s=>s.presentationMinutes;
 const manualQaName=s=>typeof s.qaName==='string'?s.qaName.trim():'';
@@ -60,7 +60,7 @@ const sectionColor=name=>{let hash=0;for(const char of (name||''))hash=(hash*31+
 function renderSectionLegend(){const legend=$('sectionLegend');legend.replaceChildren();const sections=[...new Set(sessions.map(s=>s.name).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt'));for(const name of sections){const active=activeSectionFilter===name;const key=document.createElement('button');key.type='button';key.className='section-key'+(sectionInitials(name)==='CIMCM'?' section-key-wide':'');key.textContent=sectionInitials(name);key.style.setProperty('--section-color',name==='Clube'?'#0c2c4d':sectionColor(name));key.dataset.tooltip=name;key.title=name;key.setAttribute('aria-label',(active?'Remover filtro: ':'Filtrar por: ')+name);key.setAttribute('aria-pressed',String(active));key.onclick=()=>{activeSectionFilter=active?'':name;excludedSections.clear();render();};const group=document.createElement('span');group.className='section-filter-group';const minus=document.createElement('button');minus.type='button';minus.className='section-exclude';minus.textContent='−';const excluded=excludedSections.has(name);minus.setAttribute('aria-pressed',String(excluded));minus.title=(excluded?'Voltar a incluir: ':'Excluir: ')+name;minus.setAttribute('aria-label',minus.title);minus.onclick=()=>{activeSectionFilter='';if(excludedSections.has(name))excludedSections.delete(name);else excludedSections.add(name);render();};group.append(minus,key);legend.append(group);}}
 function filteredSessions(){return sessions.filter(s=>(!activeSectionFilter||s.name===activeSectionFilter)&&!excludedSections.has(s.name)&&(!qaFilterActive||qa(s)>0));}
 function render(){
- const v=$('view'),oldMin=minTime,oldScroll=v.scrollTop;minTime=dailyMode?600:600;maxTime=dailyMode?1530:1455;const height=(maxTime-minTime)*1.6;
+ const v=$('view'),oldMin=minTime,oldScroll=v.scrollTop;minTime=dailyMode?600:660;maxTime=dailyMode?1530:1380;const height=(maxTime-minTime)*1.6;
  const visibleSessions=filteredSessions();const all=scheduleReady?conflicts(visibleSessions):[],bad=new Set(all.flatMap(c=>[c.a.id,c.b.id]));$('calendar').replaceChildren();if(!dailyMode){const corner=document.createElement('div');corner.className='corner';corner.setAttribute('aria-label','Horas');$('calendar').append(corner);}
  for(let day=(dailyMode?dailyDay:19);day<=(dailyMode?dailyDay:28);day++){const el=document.createElement('div');el.className='dayhead'+(['sábado','domingo'].includes(days[day-18])?' weekend':'');el.innerHTML=`<strong>${day} novembro</strong><span>${days[day-18]}</span>`;$('calendar').append(el);}
  if(!dailyMode){const axis=document.createElement('div');axis.className='axis';axis.style.height=height+'px';for(let t=minTime;t<=maxTime;t+=15){const el=document.createElement('span');el.className='tick'+(t%60?' tick-minor':'');el.style.top=(t-minTime)*1.6+'px';if(t===minTime)el.style.transform='none';if(t===maxTime)el.style.transform='translateY(-100%)';el.textContent=time(t);axis.append(el);}$('calendar').append(axis);}
@@ -129,5 +129,5 @@ async function endDrag(){if(!drag)return;const d=drag;cleanDrag();if(!d.active)r
 function cancelDrag(){cleanDrag();sessions=copy(latest);render();}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&drag)cancelDrag();});
 
-$('calendar').style.zoom=zoom;render();$('view').scrollTop=(600-minTime)*1.6;$('view').scrollLeft=0;
+$('calendar').style.zoom=zoom;render();$('view').scrollTop=0;$('view').scrollLeft=0;
 </script></body></html>
