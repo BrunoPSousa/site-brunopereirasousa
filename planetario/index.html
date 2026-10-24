@@ -4,7 +4,7 @@ function chooseRoom(room){
  const selected=rooms.includes(room)?room:rooms[0];
  document.querySelectorAll('[data-room]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.room===selected)));
  frame.style.visibility='hidden';
- frame.src=selected+'.html?readonly=1&v=20261024-bird-cutout';
+ frame.src=selected+'.html?readonly=1&v=20261024-export-button-labels';
  frame.title='Mapa '+(selected==='passos'?'PM':selected==='bcchl'?'BCC HL':selected.toUpperCase());
  history.replaceState(null,'',location.pathname+location.search+'#'+selected);
 }
