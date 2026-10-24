@@ -74,11 +74,13 @@ export function buildDetailsPdf({sessions,roomName,filterLabel='',measureText,ex
  return new Blob([pdf],{type:'application/pdf'});
 }
 async function loadBird(){
- const response=await fetch(new URL('./festival-2026.jpg',import.meta.url));
+ const response=await fetch(new URL('./pdf-bird-transparent.png',import.meta.url));
  if(!response.ok)throw new Error('Não foi possível carregar o passarinho.');
  const image=await createImageBitmap(await response.blob());
  const canvas=document.createElement('canvas');canvas.width=120;canvas.height=150;
- canvas.getContext('2d').drawImage(image,0,0,image.width/3,image.height,0,0,canvas.width,canvas.height);
+ const context=canvas.getContext('2d');
+ context.fillStyle='#fff';context.fillRect(0,0,canvas.width,canvas.height);
+ context.drawImage(image,0,0,canvas.width,canvas.height);
  image.close();
  const bytes=atob(canvas.toDataURL('image/jpeg',0.85).split(',')[1]);
  return {width:canvas.width,height:canvas.height,hex:Array.from(bytes,c=>c.charCodeAt(0).toString(16).padStart(2,'0')).join('')};

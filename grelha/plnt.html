@@ -14,7 +14,7 @@
 import {connectRoom} from "./shared-store.js?v=20261023-required-fields";
 import {exportCalendarPng} from "./export-png.js?v=20261015-export-metadata";
 import {exportCalendarPdf} from "./export-pdf.js?v=20261015-half-cm-margins";
-import {exportDetailsPdf} from "./export-details-pdf.js?v=20261024-header-stamp-bird";
+import {exportDetailsPdf} from "./export-details-pdf.js?v=20261024-bird-cutout";
 const $=id=>document.getElementById(id),copy=x=>JSON.parse(JSON.stringify(x));
 const days=['quarta','quinta','sexta','sábado','domingo','segunda','terça','quarta','quinta','sexta','sábado'];
 const dailyParams=new URLSearchParams(location.search),dailyMode=dailyParams.get('daily')==='1',dailyDay=Math.max(19,Math.min(28,Number(dailyParams.get('day'))||19));if(dailyMode)document.body.classList.add('daily-view');
