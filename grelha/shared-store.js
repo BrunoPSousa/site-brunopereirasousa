@@ -60,7 +60,8 @@ function encode(before,after,room){
  const qaText=club?'':cleanText(after.qaName,160);
  // Conserva os vários nomes migrados quando a caixa de Q&A não foi alterada.
  const qaNames=club?[]:before&&qaText===before.qaName?[...before.qaNames]:qaText?[qaText]:[];
- const qaMinutes=club?0:before&&qaText===before.qaName?before.qaMinutes:qaNames.length?20:0;
+ const qaMinutes=club||!qaNames.length?0:(after.qaMinutes??(before&&qaText===before.qaName?before.qaMinutes:20));
+ if(!Number.isInteger(qaMinutes)||qaMinutes<0||qaMinutes>120||(qaNames.length>0&&qaMinutes===0))throw Error('Indica uma duração de Q&A entre 1 e 120 minutos.');
  const storedFilms=films.map(([title,minutes])=>({title,minutes}));
  return {id:after.id,day:after.day,start:after.start,duration,sessionTitle,section,
   films:storedFilms,presentationMinutes,qaNames,qaMinutes,notes,presenter,type:club?'event':'cinema',
