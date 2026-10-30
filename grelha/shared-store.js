@@ -29,7 +29,9 @@ function decode(id,value){
   !cleanText(value.sessionTitle,160)||!cleanText(value.section,160)||
   !['cinema','event'].includes(value.type)||typeof value.generalPublic!=='boolean'||
   typeof value.estimated!=='boolean'||typeof value.notes!=='string'||value.notes.length>500||
-  (value.presenter!==undefined&&(typeof value.presenter!=='string'||value.presenter.length>160)))
+  (value.presenter!==undefined&&(typeof value.presenter!=='string'||value.presenter.length>160))||
+  (value.invitee!==undefined&&(typeof value.invitee!=='string'||value.invitee.length>160))||
+  (value.moderator!==undefined&&(typeof value.moderator!=='string'||value.moderator.length>160)))
   throw Error(`Dados inválidos na sessão ${id}.`);
  const films=readFilms(value.films),qaNames=readQaNames(value.qaNames);
  if(value.type==='cinema'&&films.length&&films.reduce((sum,[,minutes])=>sum+minutes,0)!==value.duration)
@@ -40,7 +42,7 @@ function decode(id,value){
  return {id,day:value.day,start:value.start,duration:value.duration,
   sessionTitle:value.sessionTitle,name:value.section,films,
   presentationMinutes:value.presentationMinutes,qaNames,qaName:qaNames.join(', '),qaMinutes:value.qaMinutes,
-  notes:value.notes,presenter:cleanText(value.presenter,160),club:value.type==='event',generalPublic:value.generalPublic,
+  notes:value.notes,presenter:cleanText(value.presenter,160),invitee:cleanText(value.invitee,160),moderator:cleanText(value.moderator,160),club:value.type==='event',generalPublic:value.generalPublic,
   estimated:value.estimated,code:cleanText(value.code,40),_rev:value.revision};
 }
 function encode(before,after,room){
@@ -62,9 +64,11 @@ function encode(before,after,room){
  const qaNames=club?[]:before&&qaText===before.qaName?[...before.qaNames]:qaText?[qaText]:[];
  const qaMinutes=club||!qaNames.length?0:(after.qaMinutes??(before&&qaText===before.qaName?before.qaMinutes:20));
  if(!Number.isInteger(qaMinutes)||qaMinutes<0||qaMinutes>120||(qaNames.length>0&&qaMinutes===0))throw Error('Indica uma duração de Q&A entre 1 e 120 minutos.');
+ const invitee=cleanText(after.invitee??before?.invitee??'',160),moderator=cleanText(after.moderator??before?.moderator??'',160);
+ if(typeof (after.invitee??before?.invitee??'')!=='string'||(after.invitee??before?.invitee??'').length>160||typeof (after.moderator??before?.moderator??'')!=='string'||(after.moderator??before?.moderator??'').length>160)throw Error('Convidado ou moderador inválido.');
  const storedFilms=films.map(([title,minutes])=>({title,minutes}));
  return {id:after.id,day:after.day,start:after.start,duration,sessionTitle,section,
-  films:storedFilms,presentationMinutes,qaNames,qaMinutes,notes,presenter,type:club?'event':'cinema',
+  films:storedFilms,presentationMinutes,qaNames,qaMinutes,notes,presenter,invitee,moderator,type:club?'event':'cinema',
   generalPublic:after.generalPublic!==false,estimated:!!before?.estimated&&!films.length,
   revision:before?before._rev+1:0,code:cleanText(after.code,40)||room,updatedAt:serverTimestamp()};
 }

@@ -28,7 +28,9 @@ service cloud.firestore {
           'generalPublic','estimated','revision','updatedAt','code','presenter'])
           && s.keys().hasOnly(['id','day','start','duration','sessionTitle','section',
           'films','presentationMinutes','qaNames','qaMinutes','notes','type',
-          'generalPublic','estimated','revision','updatedAt','code','presenter'])
+          'generalPublic','estimated','revision','updatedAt','code','presenter','invitee','moderator'])
+          && (!('invitee' in s) || (s.invitee is string && s.invitee.size() <= 160))
+          && (!('moderator' in s) || (s.moderator is string && s.moderator.size() <= 160))
           && s.id == sessionId
           && s.day is int && s.day >= 19 && s.day <= 28
           && s.start is int && s.start >= 0 && s.start < 1800
@@ -53,7 +55,9 @@ service cloud.firestore {
       allow read: if validRoom(room);
       allow create: if validRoom(room) && validData() && request.resource.data.revision == 0;
       allow update: if validRoom(room) && validData()
-        && request.resource.data.revision == resource.data.revision + 1;
+        && request.resource.data.revision == resource.data.revision + 1
+        && (!('invitee' in resource.data) || 'invitee' in request.resource.data)
+        && (!('moderator' in resource.data) || 'moderator' in request.resource.data);
       allow delete: if false;
     }
   }
