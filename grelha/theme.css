@@ -292,3 +292,5 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
 #qaEditor #qaModeratorWrap,#qaEditor #qaNameWrap{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:12px;margin:10px 0}#qaEditor #qaModerator,#qaEditor #qaName{width:100%;min-width:0;margin-top:0;box-sizing:border-box}
 
 #qaEditor #qaMinutesWrap{grid-template-columns:minmax(0,1fr) 62px 70px;gap:7px}#qaEditor #qaMinutes{grid-column:2}
+
+#clubSummary dd:first-of-type{text-align:left}
