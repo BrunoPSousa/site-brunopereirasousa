@@ -279,3 +279,6 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
 .section-exclude:hover{background:#bcbcbc}
 .section-exclude[aria-pressed="true"]{background:#c92a36;color:#fff}
 .section-exclude[aria-pressed="true"]:hover{background:#ad202c}
+
+/* Secções do quadro de edição */
+#editor .editor-heading{font-size:15px;font-weight:700;margin:20px 0 12px;padding-top:16px;border-top:1px solid #ddd}#editor .editor-heading-type{margin-top:0;padding-top:0;border:0}#editor .editor-heading-type:has(+ #clubWrap[hidden]),#editor .editor-heading-details:has(+ #publicWrap[hidden]){display:none}#editor #sessionEditor,#editor #clubEditor{border:0;margin-top:0;padding-top:0}#editor #qaEditor{border:0;margin:0;padding:0}#editor #sessionNotesWrap,#editor #clubEditor label:has(#clubNotes){margin-top:0}
