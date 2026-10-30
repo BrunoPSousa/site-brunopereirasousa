@@ -286,3 +286,5 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
 #qaMinutesWrap{display:grid;grid-template-columns:max-content 62px;align-items:center;gap:12px;font-weight:700;font-size:13px;margin:12px 0}#qaMinutes{text-align:right;font-weight:400;font-variant-numeric:tabular-nums;width:62px}
 
 #qaModeratorWrap{display:block;font-weight:700;font-size:13px;margin:12px 0}#qaModerator{display:block;width:100%;margin-top:6px;padding:8px}
+
+#sessionEditor>label#inviteeWrap{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:center;gap:12px}#inviteeWrap #invitee{width:100%;min-width:0;box-sizing:border-box}
