@@ -23,11 +23,12 @@ service cloud.firestore {
     match /festivalGridCurrent2026/{room}/sessions/{sessionId} {
       function validData() {
         let s = request.resource.data;
+        let qa = ('qaInvitees' in s) ? s.qaInvitees : s.get('qaNames', []);
         return s.keys().hasAll(['id','day','start','duration','sessionTitle','section',
-          'films','presentationMinutes','qaNames','qaMinutes','notes','type',
+          'films','presentationMinutes','qaMinutes','notes','type',
           'generalPublic','estimated','revision','updatedAt','code','presenter'])
           && s.keys().hasOnly(['id','day','start','duration','sessionTitle','section',
-          'films','presentationMinutes','qaNames','qaMinutes','notes','type',
+          'films','presentationMinutes','qaNames','qaInvitees','qaMinutes','notes','type',
           'generalPublic','estimated','revision','updatedAt','code','presenter','invitee','moderator'])
           && (!('invitee' in s) || (s.invitee is string && s.invitee.size() <= 160))
           && (!('moderator' in s) || (s.moderator is string && s.moderator.size() <= 160))
@@ -39,10 +40,11 @@ service cloud.firestore {
           && s.section is string && s.section.size() > 0 && s.section.size() <= 160
           && s.films is list && s.films.size() <= 50
           && s.presentationMinutes is int && s.presentationMinutes >= 0 && s.presentationMinutes <= 120
-          && s.qaNames is list && s.qaNames.size() <= 20
+          && (('qaInvitees' in s) != ('qaNames' in s))
+          && qa is list && qa.size() <= 20
           && s.qaMinutes is int && s.qaMinutes >= 0 && s.qaMinutes <= 120
-          && ((s.qaNames.size() == 0 && s.qaMinutes == 0)
-            || (s.qaNames.size() > 0 && s.qaMinutes > 0))
+          && ((qa.size() == 0 && s.qaMinutes == 0)
+            || (qa.size() > 0 && s.qaMinutes > 0))
           && s.notes is string && s.notes.size() <= 500
           && s.presenter is string && s.presenter.size() <= 160
           && (s.type == 'cinema' || s.type == 'event')
@@ -56,6 +58,7 @@ service cloud.firestore {
       allow create: if validRoom(room) && validData() && request.resource.data.revision == 0;
       allow update: if validRoom(room) && validData()
         && request.resource.data.revision == resource.data.revision + 1
+        && (!('qaInvitees' in resource.data) || 'qaInvitees' in request.resource.data)
         && (!('invitee' in resource.data) || 'invitee' in request.resource.data)
         && (!('moderator' in resource.data) || 'moderator' in request.resource.data);
       allow delete: if false;

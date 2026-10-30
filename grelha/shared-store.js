@@ -33,7 +33,7 @@ function decode(id,value){
   (value.invitee!==undefined&&(typeof value.invitee!=='string'||value.invitee.length>160))||
   (value.moderator!==undefined&&(typeof value.moderator!=='string'||value.moderator.length>160)))
   throw Error(`Dados inválidos na sessão ${id}.`);
- const films=readFilms(value.films),qaNames=readQaNames(value.qaNames);
+ const films=readFilms(value.films),qaNames=readQaNames(value.qaInvitees??value.qaNames);
  if(value.type==='cinema'&&films.length&&films.reduce((sum,[,minutes])=>sum+minutes,0)!==value.duration)
   throw Error(`Duração dos filmes diferente na sessão ${id}.`);
  if(value.type==='event'&&(value.presentationMinutes!==0||value.qaMinutes!==0||qaNames.length))
@@ -68,7 +68,7 @@ function encode(before,after,room){
  if(typeof (after.invitee??before?.invitee??'')!=='string'||(after.invitee??before?.invitee??'').length>160||typeof (after.moderator??before?.moderator??'')!=='string'||(after.moderator??before?.moderator??'').length>160)throw Error('Convidado ou moderador inválido.');
  const storedFilms=films.map(([title,minutes])=>({title,minutes}));
  return {id:after.id,day:after.day,start:after.start,duration,sessionTitle,section,
-  films:storedFilms,presentationMinutes,qaNames,qaMinutes,notes,presenter,invitee,moderator,type:club?'event':'cinema',
+  films:storedFilms,presentationMinutes,qaInvitees:qaNames,qaMinutes,notes,presenter,invitee,moderator,type:club?'event':'cinema',
   generalPublic:after.generalPublic!==false,estimated:!!before?.estimated&&!films.length,
   revision:before?before._rev+1:0,code:cleanText(after.code,40)||room,updatedAt:serverTimestamp()};
 }
