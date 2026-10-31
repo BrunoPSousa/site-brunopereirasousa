@@ -297,3 +297,6 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
 
 /* Nos telemóveis, o mapa começa imediatamente abaixo do cabeçalho. */
 @media(max-width:800px){body:not(.shell)>.bar{display:none!important}}
+
+/* Permite deslocar o mapa ao iniciar o gesto sobre uma sessão. */
+@media(max-width:800px){body:not(.shell) .session{touch-action:pan-x pan-y}}
