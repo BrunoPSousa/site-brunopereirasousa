@@ -294,3 +294,6 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
 #qaEditor #qaMinutesWrap{grid-template-columns:minmax(0,1fr) 62px 70px;gap:7px}#qaEditor #qaMinutes{grid-column:2}
 
 #clubSummary dd:first-of-type{text-align:left}
+
+/* Nos telemóveis, o mapa começa imediatamente abaixo do cabeçalho. */
+@media(max-width:800px){body:not(.shell)>.bar{display:none!important}}
