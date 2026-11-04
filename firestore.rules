@@ -29,7 +29,9 @@ service cloud.firestore {
           'generalPublic','estimated','revision','updatedAt','code','presenter'])
           && s.keys().hasOnly(['id','day','start','duration','sessionTitle','section',
           'films','presentationMinutes','qaNames','qaInvitees','qaMinutes','notes','type',
-          'generalPublic','estimated','revision','updatedAt','code','presenter','invitee','moderator'])
+          'generalPublic','estimated','revision','updatedAt','code','presenter','invitee','moderator','spotting','legendador'])
+          && (!('spotting' in s) || s.spotting is bool)
+          && (!('legendador' in s) || (s.legendador is string && s.legendador.size() <= 160))
           && (!('invitee' in s) || (s.invitee is string && s.invitee.size() <= 160))
           && (!('moderator' in s) || (s.moderator is string && s.moderator.size() <= 160))
           && s.id == sessionId
@@ -60,7 +62,9 @@ service cloud.firestore {
         && request.resource.data.revision == resource.data.revision + 1
         && (!('qaInvitees' in resource.data) || 'qaInvitees' in request.resource.data)
         && (!('invitee' in resource.data) || 'invitee' in request.resource.data)
-        && (!('moderator' in resource.data) || 'moderator' in request.resource.data);
+        && (!('moderator' in resource.data) || 'moderator' in request.resource.data)
+        && (!('spotting' in resource.data) || 'spotting' in request.resource.data)
+        && (!('legendador' in resource.data) || 'legendador' in request.resource.data);
       allow delete: if false;
     }
   }
