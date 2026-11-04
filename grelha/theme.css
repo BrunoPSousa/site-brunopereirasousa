@@ -302,3 +302,6 @@ body.zoom-small:not(.daily-view) .session .presentation,body.zoom-small:not(.dai
 @media(max-width:800px){body:not(.shell) .session{touch-action:pan-x pan-y}}
 
 .spotting-row{display:flex;align-items:center;gap:14px;margin-top:16px;font-weight:700}.spotting-toggle{display:flex;gap:3px;padding:3px;border:1px solid #c8c8c8;border-radius:999px;background:#f1f1f1}.spotting-toggle label{position:relative;cursor:pointer}.spotting-toggle input{position:absolute;opacity:0}.spotting-toggle span{display:block;padding:7px 16px;border-radius:999px}.spotting-toggle input:checked+span{background:#ff3eb5}.spotting-toggle input:focus-visible+span{outline:3px solid #d84db3}#sessionEditor #legendadorWrap:not([hidden]){display:flex;align-items:center;gap:12px}#legendador{flex:1;min-width:0}
+
+/* Identifica as sessões com spotting junto da secção. */
+.spotting-marker{position:absolute;right:calc(100% + 4px);top:50%;transform:translateY(-50%);color:#1462bc;font-size:11px;font-weight:700;line-height:1}
