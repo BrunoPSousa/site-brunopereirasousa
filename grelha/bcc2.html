@@ -18,7 +18,7 @@ import {exportDetailsPdf} from "./export-details-pdf.js?v=20261024-bird-cutout";
 const $=id=>document.getElementById(id),copy=x=>JSON.parse(JSON.stringify(x));
 const days=['quarta','quinta','sexta','sábado','domingo','segunda','terça','quarta','quinta','sexta','sábado'];
 const dailyParams=new URLSearchParams(location.search),dailyMode=dailyParams.get('daily')==='1',dailyDay=Math.max(19,Math.min(28,Number(dailyParams.get('day'))||19));if(dailyMode)document.body.classList.add('daily-view');
-const readOnlyMode=dailyParams.get('readonly')==='1';
+const readOnlyMode=dailyParams.get('editor')!=='1'||dailyParams.get('readonly')==='1';
 if(readOnlyMode){document.body.classList.add('partner-readonly');$('editMode').hidden=true;$('newSessionButton').hidden=true;}
 let sessions=[],selected=null,drag=null,minTime=600,maxTime=1455,toastTimer,zoom=.72,editMode=false;
 // Apenas nomes, filmes e janelas de presença necessários ao programa.
