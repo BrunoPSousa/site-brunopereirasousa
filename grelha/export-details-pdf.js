@@ -21,6 +21,7 @@ export function reportBlocks(sessions,roomName){
    rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(qa&&qaNames?[{text:` (com ${qaNames})`}]:[])]});
   }
   rows.push({runs:[{text:`Duração total da sessão: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
+  if(!s.club)rows.push({runs:[{text:'Spotting:',bold:true},{text:s.spotting?(s.legendador?.trim()?` sim (${s.legendador.trim()})`:' sim'):' não'}]});
   if(s.club&&s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});
   if(s.notes?.trim())rows.push({runs:[{text:'Detalhes: ',bold:true},{text:s.notes.trim()}]});
   return {day:s.day,heading:s.sessionTitle||'Sem título',metadata:`${s.day} nov. · ${clock(s.start)}–${clock(s.start+total)} · ${roomName}`,rows};
@@ -49,12 +50,12 @@ export function buildDetailsPdf({sessions,roomName,filterLabel='',measureText,ex
  const blocks=reportBlocks(sessions,roomName),byDay=new Map();for(const b of blocks){if(!byDay.has(b.day))byDay.set(b.day,[]);byDay.get(b.day).push(b);}
  for(let day=19;day<=28;day++){
   const today=byDay.get(day)||[];
+  if(!today.length)continue;
   for(pageScale=1;pageScale>=0.6;pageScale=Math.round((pageScale-0.05)*100)/100){
    newPage(day);
    add([{text:`${today.length} ${today.length===1?'sessão':'sessões'}`,bold:true},{text:' · Ordem cronológica',color:'0.30 0.39 0.48'}],9);
    if(filterLabel)add([{text:'Filtros: ',bold:true},{text:filterLabel,color:'0.30 0.39 0.48'}],8);
    y+=10*pageScale;
-   if(!today.length)add([{text:'Sem sessões correspondentes aos filtros neste dia.',color:'0.30 0.39 0.48'}],10);
    for(const block of today){
     add([{text:block.heading,size:13,bold:true},{text:'   '},{text:block.metadata,size:9,color:'0.30 0.39 0.48'}],13);
     for(const row of block.rows)add(row.runs,10);
