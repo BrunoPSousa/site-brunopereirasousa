@@ -6,28 +6,28 @@ const clock=n=>`${String(Math.floor(n/60)%24).padStart(2,'0')}:${String(n%60).pa
 const minutes=n=>Number.isFinite(n)?`${n} min`:'Por confirmar';
 const sectionColor=name=>{let hash=0;for(const char of (name||''))hash=(hash*31+char.charCodeAt(0))>>>0;return ['#3d678a','#80568d','#a06242','#2f7563','#955069','#69744b','#4f687c','#8b6940'][hash%8];};
 const pdfColor=value=>{const n=parseInt(value.replace('#',''),16);return `${((n>>16)&255)/255} ${((n>>8)&255)/255} ${(n&255)/255}`;};
-export function reportBlocks(sessions,roomName){
+export function reportBlocks(sessions,roomName,{spotMode=false,filmDetails={}}={}){
  return [...sessions].sort((a,b)=>a.day-b.day||a.start-b.start||(a.sessionTitle||'').localeCompare(b.sessionTitle||'','pt')).map(s=>{
   const intro=s.club?0:(s.presentationMinutes||0),qa=s.club?0:(s.qaMinutes||0),total=s.duration+intro+qa;
   const sessionType=s.club?'Evento':'Cinema',audience=s.generalPublic===false?'Público específico':'Público Geral';
   const typeLine=[{text:sessionType},{text:` · ${audience}`}];
   if(s.name)typeLine.push({text:` · ${s.name}`,color:pdfColor(sectionColor(s.name))});
-  const rows=[{runs:typeLine}];
+  const rows=spotMode?(s.name?[{runs:[{text:s.name,color:pdfColor(sectionColor(s.name))}]}]:[]):[{runs:typeLine}];
   if(!s.club){
    const qaNames=(s.qaNames?.length?s.qaNames:[s.qaName]).filter(Boolean).join(', ');
-   rows.push({runs:[{text:`Apresentação: ${intro?minutes(intro):'não'}`,bold:true},...(intro&&s.presenter?[{text:` (com ${s.presenter})`}]:[])]});
+   rows.push({runs:[{text:`Apresentação: ${intro?minutes(intro):'não'}`,bold:true},...(!spotMode&&intro&&s.presenter?[{text:` (com ${s.presenter})`}]:[])]});
    rows.push({runs:[{text:`Filmes (${(s.films||[]).length}):`,bold:true}]});
-   for(const [name,duration]of s.films||[])rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`}]});
-   rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(qa&&qaNames?[{text:` (com ${qaNames})`}]:[])]});
+   for(const [name,duration]of s.films||[]){const details=filmDetails[name]||{},raw=typeof details.spottingLanguage==='string'?details.spottingLanguage.trim():'',code=raw.toUpperCase(),spot=code==='PT'||code==='EN'?`Spotting ${code}`:'Sem spotting';rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`},...(spotMode?[{text:` · ${spot}`,bold:true}]:[])]});if(spotMode&&typeof details.notes==='string'&&details.notes.trim())rows.push({runs:[{text:'    Nota: ',bold:true},{text:details.notes.trim()}]});}
+   rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(!spotMode&&qa&&qaNames?[{text:` (com ${qaNames})`}]:[])]});
   }
   rows.push({runs:[{text:`Duração total da sessão: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
   if(!s.club)rows.push({runs:[{text:'Spotting:',bold:true},{text:s.spotting?(s.legendador?.trim()?` sim (${s.legendador.trim()})`:' sim'):' não'}]});
-  if(s.club&&s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});
-  if(s.notes?.trim())rows.push({runs:[{text:'Detalhes: ',bold:true},{text:s.notes.trim()}]});
+  if(!spotMode&&s.club&&s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});
+  if(!spotMode&&s.notes?.trim())rows.push({runs:[{text:'Detalhes: ',bold:true},{text:s.notes.trim()}]});
   return {day:s.day,heading:s.sessionTitle||'Sem título',metadata:`${s.day} nov. · ${clock(s.start)}–${clock(s.start+total)} · ${roomName}`,rows};
  });
 }
-export function buildDetailsPdf({sessions,roomName,filterLabel='',measureText,exportedAt=new Date(),bird=null}){
+export function buildDetailsPdf({sessions,roomName,filterLabel='',measureText,exportedAt=new Date(),bird=null,spotMode=false,filmDetails={}}){
  const pages=[];let page,y,pageScale=1;
  const lineText=(runs,startX=M)=>{
   let x=startX,out='BT\n';
@@ -47,7 +47,7 @@ export function buildDetailsPdf({sessions,roomName,filterLabel='',measureText,ex
  const birdWidth=34,birdHeight=42,birdX=W-M-birdWidth,birdY=H-70;
  const newPage=day=>{page=[];y=38;page.push(lineText([{text:'PORTO/POST/DOC 2026 · DETALHES DAS SESSÕES',size:9,bold:true}]));y=58;page.push(lineText([{text:roomName,size:10,bold:true},{text:`   ·   ${day} novembro 2026`,size:10,color:'0.30 0.39 0.48'}]));const labelSize=8;page.push(lineText([{text:exportLabel,size:labelSize,color:'0.30 0.39 0.48'}],birdX-14-measureText(exportLabel,labelSize,false,false)));if(bird)page.push(`q ${birdWidth} 0 0 ${birdHeight} ${birdX.toFixed(2)} ${birdY.toFixed(2)} cm /Bird Do Q\n`);y=74;page.push(`0.85 G ${M} ${H-y} m ${W-M} ${H-y} l S\n`);y=92;};
  const add=(runs,size=10)=>{runs=runs.map(r=>({...r,size:(r.size||size)*pageScale}));for(const line of wrapRuns(runs)){page.push(lineText(line));y+=size*pageScale*1.4;}};
- const blocks=reportBlocks(sessions,roomName),byDay=new Map();for(const b of blocks){if(!byDay.has(b.day))byDay.set(b.day,[]);byDay.get(b.day).push(b);}
+ const blocks=reportBlocks(sessions,roomName,{spotMode,filmDetails}),byDay=new Map();for(const b of blocks){if(!byDay.has(b.day))byDay.set(b.day,[]);byDay.get(b.day).push(b);}
  for(let day=19;day<=28;day++){
   const today=byDay.get(day)||[];
   if(!today.length)continue;
@@ -86,13 +86,13 @@ async function loadBird(){
  const bytes=atob(canvas.toDataURL('image/jpeg',0.85).split(',')[1]);
  return {width:canvas.width,height:canvas.height,hex:Array.from(bytes,c=>c.charCodeAt(0).toString(16).padStart(2,'0')).join('')};
 }
-export async function exportDetailsPdf({sessions,roomName,filterLabel,notify,button}){
+export async function exportDetailsPdf({sessions,roomName,filterLabel,notify,button,spotMode=false,loadFilmDetails=null}){
  if(!sessions.length){notify('Não há sessões para exportar com estes filtros.');return;}
  button.disabled=true;
  try{
   const ctx=document.createElement('canvas').getContext('2d');
-  const bird=await loadBird();
-  const blob=buildDetailsPdf({sessions,roomName,filterLabel,bird,measureText:(text,size,bold,italic)=>{ctx.font=`${italic?'italic ':''}${bold?'bold ':''}${size}px Arial`;return ctx.measureText(text).width;}});
+  const [bird,filmDetails]=await Promise.all([loadBird(),spotMode&&loadFilmDetails?loadFilmDetails(sessions):Promise.resolve({})]);
+  const blob=buildDetailsPdf({sessions,roomName,filterLabel,bird,spotMode,filmDetails,measureText:(text,size,bold,italic)=>{ctx.font=`${italic?'italic ':''}${bold?'bold ':''}${size}px Arial`;return ctx.measureText(text).width;}});
   const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`PPD26-Detalhes-${roomName.replace(/[^a-z0-9]+/gi,'-')}.pdf`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);notify('PDF de detalhes exportado.');
  }catch(error){console.error(error);notify('Não foi possível exportar os detalhes.');}finally{button.disabled=false;}
 }
