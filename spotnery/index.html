@@ -4,11 +4,11 @@ function chooseRoom(room){
  const selected=rooms.includes(room)?room:rooms[0];
  document.querySelectorAll('[data-room]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.room===selected)));
  frame.style.visibility='hidden';
- frame.src=selected+'.html?readonly=1&spotHideQa=1&v=20261116-spot-tony-aviso';
+ frame.src=selected+'.html?readonly=1&spotHideQa=1&spotNery=1&v=20261116-spot-nery-details';
  frame.title='Mapa '+(selected==='passos'?'PM':selected==='bcchl'?'BCC HL':selected.toUpperCase());
  history.replaceState(null,'',location.pathname+location.search+'#'+selected);
 }
-frame.addEventListener('load',()=>{const style=frame.contentDocument.createElement('style');style.textContent='.section-badge{background:transparent!important;color:transparent!important;min-width:0!important;padding:0!important}.spotting-marker{display:none!important}.session{background-image:none!important;background-color:#ededed!important}.session:has(.spotting-marker){background-color:#00e600!important}#spottingDetails{display:none!important}.qa-filter,.section-legend{display:none!important}.session:not(.club-session) .presentation,.session:not(.club-session) .category,.session:not(.club-session) .estimate-icon{display:none!important}';frame.contentDocument.head.append(style);frame.style.visibility='visible';});
+frame.addEventListener('load',()=>{const style=frame.contentDocument.createElement('style');style.textContent='.section-badge{background:transparent!important;color:transparent!important;min-width:0!important;padding:0!important}.spotting-marker{display:none!important}.session{background-image:none!important;background-color:#ededed!important}.session:has(.spotting-marker){background-color:#00e600!important}.qa-filter,.section-legend{display:none!important}.session:not(.club-session) .presentation,.session:not(.club-session) .category,.session:not(.club-session) .estimate-icon{display:none!important}';frame.contentDocument.head.append(style);frame.style.visibility='visible';});
 document.querySelectorAll('[data-room]').forEach(button=>button.onclick=()=>chooseRoom(button.dataset.room));
 window.addEventListener('hashchange',()=>chooseRoom(location.hash.slice(1)));
 chooseRoom(location.hash.slice(1));
