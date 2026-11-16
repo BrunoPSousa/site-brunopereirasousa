@@ -12,16 +12,18 @@ export function reportBlocks(sessions,roomName,{spotMode=false,filmDetails={}}={
   const sessionType=s.club?'Evento':'Cinema',audience=s.generalPublic===false?'Público específico':'Público Geral';
   const typeLine=[{text:sessionType},{text:` · ${audience}`}];
   if(s.name)typeLine.push({text:` · ${s.name}`,color:pdfColor(sectionColor(s.name))});
-  const rows=spotMode?(s.name?[{runs:[{text:s.name,color:pdfColor(sectionColor(s.name))}]}]:[]):[{runs:typeLine}];
+  const rows=spotMode?[]:[{runs:typeLine}];
+  if(spotMode&&!s.club)rows.push({runs:[{text:'Spotting: '+(s.spotting?'sim':'não'),bold:true,size:11,color:s.spotting?pdfColor('#087b2d'):pdfColor('#555555')},...(s.spotting&&s.legendador?.trim()?[{text:` (${s.legendador.trim()})`}]:[])]});
+  if(spotMode&&s.name)rows.push({runs:[{text:s.name,color:pdfColor(sectionColor(s.name))}]});
   if(!s.club){
    const qaNames=(s.qaNames?.length?s.qaNames:[s.qaName]).filter(Boolean).join(', ');
-   rows.push({runs:[{text:`Apresentação: ${intro?minutes(intro):'não'}`,bold:true},...(!spotMode&&intro&&s.presenter?[{text:` (com ${s.presenter})`}]:[])]});
-   rows.push({runs:[{text:`Filmes (${(s.films||[]).length}):`,bold:true}]});
-   for(const [name,duration]of s.films||[]){const details=filmDetails[name]||{},raw=typeof details.spottingLanguage==='string'?details.spottingLanguage.trim():'',code=raw.toUpperCase(),spot=code==='PT'||code==='EN'?`Spotting ${code}`:'Sem spotting';rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`},...(spotMode?[{text:` · ${spot}`,bold:true}]:[])]});if(spotMode&&typeof details.notes==='string'&&details.notes.trim())rows.push({runs:[{text:'    Nota: ',bold:true},{text:details.notes.trim()}]});}
-   rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(!spotMode&&qa&&qaNames?[{text:` (com ${qaNames})`}]:[])]});
+   if(!spotMode)rows.push({runs:[{text:`Apresentação: ${intro?minutes(intro):'não'}`,bold:true},...(!spotMode&&intro&&s.presenter?[{text:` (com ${s.presenter})`}]:[])]});
+   if(!spotMode)rows.push({runs:[{text:`Filmes (${(s.films||[]).length}):`,bold:true}]});
+   for(const [name,duration]of s.films||[]){const details=filmDetails[name]||{},raw=typeof details.spottingLanguage==='string'?details.spottingLanguage.trim():'',code=raw.toUpperCase(),spot=code==='PT'||code==='EN'?`Spotting ${code}`:'Sem spotting';rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`},...(spotMode?[{text:` · ${spot}`,bold:true,color:code==='PT'?pdfColor('#075985'):code==='EN'?pdfColor('#9d174d'):pdfColor('#555555')}]:[])]});if(spotMode&&typeof details.notes==='string'&&details.notes.trim())rows.push({runs:[{text:'    Nota: ',bold:true},{text:details.notes.trim()}]});}
+   if(!spotMode)rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(!spotMode&&qa&&qaNames?[{text:` (com ${qaNames})`}]:[])]});
   }
   rows.push({runs:[{text:`Duração total da sessão: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
-  if(!s.club)rows.push({runs:[{text:'Spotting:',bold:true},{text:s.spotting?(s.legendador?.trim()?` sim (${s.legendador.trim()})`:' sim'):' não'}]});
+  if(!spotMode&&!s.club)rows.push({runs:[{text:'Spotting:',bold:true},{text:s.spotting?(s.legendador?.trim()?` sim (${s.legendador.trim()})`:' sim'):' não'}]});
   if(!spotMode&&s.club&&s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});
   if(!spotMode&&s.notes?.trim())rows.push({runs:[{text:'Detalhes: ',bold:true},{text:s.notes.trim()}]});
   return {day:s.day,heading:s.sessionTitle||'Sem título',metadata:`${s.day} nov. · ${clock(s.start)}–${clock(s.start+total)} · ${roomName}`,rows};
