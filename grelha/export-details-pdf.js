@@ -14,15 +14,14 @@ export function reportBlocks(sessions,roomName,{spotMode=false,filmDetails={}}={
   if(s.name)typeLine.push({text:` · ${s.name}`,color:pdfColor(sectionColor(s.name))});
   const rows=spotMode?[]:[{runs:typeLine}];
   if(spotMode&&!s.club)rows.push({runs:[{text:'Spotting: '+(s.spotting?'sim':'não'),bold:true,size:11,color:s.spotting?pdfColor('#087b2d'):pdfColor('#555555')},...(s.spotting&&s.legendador?.trim()?[{text:` (${s.legendador.trim()})`}]:[])]});
-  if(spotMode&&s.name)rows.push({runs:[{text:s.name,color:pdfColor(sectionColor(s.name))}]});
   if(!s.club){
    const qaNames=(s.qaNames?.length?s.qaNames:[s.qaName]).filter(Boolean).join(', ');
    if(!spotMode)rows.push({runs:[{text:`Apresentação: ${intro?minutes(intro):'não'}`,bold:true},...(!spotMode&&intro&&s.presenter?[{text:` (com ${s.presenter})`}]:[])]});
    if(!spotMode)rows.push({runs:[{text:`Filmes (${(s.films||[]).length}):`,bold:true}]});
-   for(const [name,duration]of s.films||[]){const details=filmDetails[name]||{},raw=typeof details.spottingLanguage==='string'?details.spottingLanguage.trim():'',code=raw.toUpperCase(),spot=code==='PT'||code==='EN'?`Spotting ${code}`:'Sem spotting';rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`},...(spotMode?[{text:` · ${spot}`,bold:true,color:code==='PT'?pdfColor('#075985'):code==='EN'?pdfColor('#9d174d'):pdfColor('#555555')}]:[])]});if(spotMode&&typeof details.notes==='string'&&details.notes.trim())rows.push({runs:[{text:'    Nota: ',bold:true},{text:details.notes.trim()}]});}
+   for(const [name,duration]of s.films||[]){const details=filmDetails[name]||{},raw=typeof details.spottingLanguage==='string'?details.spottingLanguage.trim():'',code=raw.toUpperCase(),spot=code==='PT'||code==='EN'?`Spotting ${code}`:'Sem spotting';rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`},...(spotMode?[{text:` · ${spot}`,bold:true,color:code==='PT'?pdfColor('#075985'):code==='EN'?pdfColor('#9d174d'):pdfColor('#555555')}]:[]),...(spotMode&&typeof details.notes==='string'&&details.notes.trim()?[{text:'  '},{text:'!',warning:true},{text:' '+details.notes.trim()}]:[])]});}
    if(!spotMode)rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(!spotMode&&qa&&qaNames?[{text:` (com ${qaNames})`}]:[])]});
   }
-  rows.push({runs:[{text:`Duração total da sessão: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
+  if(!spotMode)rows.push({runs:[{text:`Duração total da sessão: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
   if(!spotMode&&!s.club)rows.push({runs:[{text:'Spotting:',bold:true},{text:s.spotting?(s.legendador?.trim()?` sim (${s.legendador.trim()})`:' sim'):' não'}]});
   if(!spotMode&&s.club&&s.presenter)rows.push({runs:[{text:'Apresentador: ',bold:true},{text:s.presenter}]});
   if(!spotMode&&s.notes?.trim())rows.push({runs:[{text:'Detalhes: ',bold:true},{text:s.notes.trim()}]});
@@ -33,13 +32,13 @@ export function buildDetailsPdf({sessions,roomName,filterLabel='',measureText,ex
  const pages=[];let page,y,pageScale=1;
  const lineText=(runs,startX=M)=>{
   let x=startX,out='BT\n';
-  for(const run of runs){const font=run.italic?(run.bold?'F4':'F3'):(run.bold?'F2':'F1'),size=run.size||10,color=run.color||'0.12 0.12 0.12';out+=`/${font} ${size} Tf ${color} rg 1 0 0 1 ${x.toFixed(2)} ${(H-y).toFixed(2)} Tm <${hex(run.text)}> Tj\n`;x+=measureText(run.text,size,!!run.bold,!!run.italic);}
+  for(const run of runs){if(run.warning){const h=(run.size||10)*0.9,base=H-y;out+=`ET\nq 1 0.8 0 rg 0.45 0.32 0 RG 0.5 w ${x.toFixed(2)} ${base.toFixed(2)} m ${(x+h).toFixed(2)} ${base.toFixed(2)} l ${(x+h/2).toFixed(2)} ${(base+h).toFixed(2)} l h B Q\nBT\n/F2 ${(h*0.72).toFixed(2)} Tf 0 0 0 rg 1 0 0 1 ${(x+h*0.38).toFixed(2)} ${(base+h*0.12).toFixed(2)} Tm <21> Tj\n`;x+=h+2;continue;}const font=run.italic?(run.bold?'F4':'F3'):(run.bold?'F2':'F1'),size=run.size||10,color=run.color||'0.12 0.12 0.12';out+=`/${font} ${size} Tf ${color} rg 1 0 0 1 ${x.toFixed(2)} ${(H-y).toFixed(2)} Tm <${hex(run.text)}> Tj\n`;x+=measureText(run.text,size,!!run.bold,!!run.italic);}
   return out+'ET\n';
  };
  const wrapRuns=runs=>{
   const lines=[];let line=[],width=0;
   const flush=()=>{if(line.length)lines.push(line);line=[];width=0;};
-  for(const run of runs){const parts=String(run.text).split(/(\s+)/).filter(Boolean);for(let part of parts){const size=run.size||10,isSpace=/^\s+$/.test(part);if(isSpace&&!line.length)continue;let candidate=part;
+  for(const run of runs){if(run.warning){const iconWidth=(run.size||10)*0.9+2;if(width+iconWidth>W-2*M&&line.length)flush();line.push(run);width+=iconWidth;continue;}const parts=String(run.text).split(/(\s+)/).filter(Boolean);for(let part of parts){const size=run.size||10,isSpace=/^\s+$/.test(part);if(isSpace&&!line.length)continue;let candidate=part;
     if(!isSpace&&width+measureText(candidate,size,!!run.bold,!!run.italic)>W-2*M&&line.length)flush();
     while(candidate&&measureText(candidate,size,!!run.bold,!!run.italic)>W-2*M){let cut=candidate.length;while(cut>1&&measureText(candidate.slice(0,cut),size,!!run.bold,!!run.italic)>W-2*M)cut--;line.push({...run,text:candidate.slice(0,cut)});width+=measureText(candidate.slice(0,cut),size,!!run.bold,!!run.italic);flush();candidate=candidate.slice(cut);}
     if(candidate){line.push({...run,text:candidate});width+=measureText(candidate,size,!!run.bold,!!run.italic);}
