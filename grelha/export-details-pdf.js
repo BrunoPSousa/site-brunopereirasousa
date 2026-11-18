@@ -19,7 +19,7 @@ export function reportBlocks(sessions,roomName,{spotMode=false,filmDetails={}}={
    if(!spotMode)rows.push({runs:[{text:`Apresentação: ${intro?minutes(intro):'não'}`,bold:true},...(!spotMode&&intro&&s.presenter?[{text:` (com ${s.presenter})`}]:[])]});
    if(!spotMode)rows.push({runs:[{text:`Filmes (${(s.films||[]).length}):`,bold:true}]});
    for(const [name,duration]of s.films||[]){const details=filmDetails[name]||{},raw=typeof details.spottingLanguage==='string'?details.spottingLanguage.trim():'',code=raw.toUpperCase(),spot=code==='PT'||code==='EN'?`Spotting ${code}`:'Sem spotting';rows.push({runs:[{text:'  '},{text:name,italic:true},{text:` — ${minutes(duration)}`},...(spotMode?[{text:` · ${spot}`,bold:true,color:code==='PT'?pdfColor('#075985'):code==='EN'?pdfColor('#9d174d'):pdfColor('#555555')}]:[]),...(spotMode&&typeof details.notes==='string'&&details.notes.trim()?[{text:'  '},{text:'!',warning:true},{text:' '+details.notes.trim()}]:[])]});}
-   if(!spotMode)rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(!spotMode&&qa&&qaNames?[{text:` (com ${qaNames})`}]:[])]});
+   if(!spotMode)rows.push({runs:[{text:`Q&A: ${qa?minutes(qa):'não'}`,bold:true},...(qa&&(s.moderator?.trim()||qaNames)?[{text:` (${[s.moderator?.trim()?`moderação: ${s.moderator.trim()}`:'',qaNames?`convidados: ${qaNames}`:''].filter(Boolean).join('; ')})`}]:[])]});
   }
   if(!spotMode)rows.push({runs:[{text:`Duração total da sessão: ${minutes(total)}${s.estimated?' (estimada)':''}`,bold:true}]});
   if(!spotMode&&!s.club)rows.push({runs:[{text:'Spotting:',bold:true},{text:s.spotting?(s.legendador?.trim()?` sim (${s.legendador.trim()})`:' sim'):' não'}]});
