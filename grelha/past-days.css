@@ -1,0 +1,15 @@
+/* Película para os dias 19 e 20 de novembro. */
+#calendar > .lane[data-day="19"]::after,
+#calendar > .lane[data-day="20"]::after,
+body:not(.daily-view) #calendar > .dayhead:nth-child(2)::after,
+body:not(.daily-view) #calendar > .dayhead:nth-child(3)::after,
+body.daily-view #calendar:has(> .lane[data-day="19"]) > .dayhead::after,
+body.daily-view #calendar:has(> .lane[data-day="20"]) > .dayhead::after {
+  content:""; position:absolute; inset:0; background:rgba(70,70,70,.18);
+  z-index:10; pointer-events:none;
+}
+#calendar > .dayhead {position:relative}
+body.past-day .daily-room > header {position:relative}
+body.past-day .daily-room > header::after {
+  content:"";position:absolute;inset:0;background:rgba(70,70,70,.18);pointer-events:none;
+}
