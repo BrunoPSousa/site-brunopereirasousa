@@ -3,6 +3,24 @@ const PAGE_HEIGHT = 595.28;
 const MARGIN = 14.17; // 0,5 cm
 const RENDER_SCALE = 2;
 
+function fadePastEvents(source, clone) {
+  const past = new Set([...source.querySelectorAll('.lane')].filter(lane => {
+    const style = window.getComputedStyle(lane, '::after');
+    return style.content !== 'none' && style.content !== 'normal' && style.display !== 'none';
+  }).map(lane => lane.dataset.day));
+  for (const lane of clone.querySelectorAll('.lane')) {
+    if (!past.has(lane.dataset.day)) continue;
+    for (const event of lane.querySelectorAll('.session')) {
+      event.style.setProperty('background-image', 'none', 'important');
+      event.style.setProperty('background-color', '#e5e5e5', 'important');
+      event.style.setProperty('color', '#737373', 'important');
+      event.style.setProperty('border-color', '#bcbcbc', 'important');
+      for (const child of event.querySelectorAll('*')) child.style.setProperty('color', '#737373', 'important');
+      for (const badge of event.querySelectorAll('.section-badge')) badge.style.setProperty('background-color', '#d1d1d1', 'important');
+    }
+  }
+}
+
 function cropCalendar(calendar, minTime, maxTime, days) {
   const clone = calendar.cloneNode(true);
   const offset = 0;
@@ -49,6 +67,7 @@ function cropCalendar(calendar, minTime, maxTime, days) {
       if (!isLine) item.style.height = `${Math.min(top + height, offset + exportHeight) - Math.max(top, offset)}px`;
     }
   }
+  fadePastEvents(calendar, clone);
   return clone;
 }
 
