@@ -1,13 +1,6 @@
-/* Película para os dias 19, 20 e 21 de novembro. */
-#calendar > .lane[data-day="19"]::after,
-#calendar > .lane[data-day="20"]::after,
-#calendar > .lane[data-day="21"]::after,
-body:not(.daily-view) #calendar > .dayhead:nth-child(2)::after,
-body:not(.daily-view) #calendar > .dayhead:nth-child(3)::after,
-body:not(.daily-view) #calendar > .dayhead:nth-child(4)::after,
-body.daily-view #calendar:has(> .lane[data-day="19"]) > .dayhead::after,
-body.daily-view #calendar:has(> .lane[data-day="20"]) > .dayhead::after,
-body.daily-view #calendar:has(> .lane[data-day="21"]) > .dayhead::after {
+/* Película aplicada aos dias concluídos pela hora de Lisboa. */
+#calendar > .lane[data-past]::after,
+#calendar > .dayhead[data-past]::after {
   content:""; position:absolute; inset:0; background:rgba(70,70,70,.18);
   z-index:10; pointer-events:none;
 }
