@@ -1,5 +1,23 @@
 const OUTPUT_WIDTH = 4961;
 
+function fadePastEvents(source, clone) {
+  const past = new Set([...source.querySelectorAll('.lane')].filter(lane => {
+    const style = window.getComputedStyle(lane, '::after');
+    return style.content !== 'none' && style.content !== 'normal' && style.display !== 'none';
+  }).map(lane => lane.dataset.day));
+  for (const lane of clone.querySelectorAll('.lane')) {
+    if (!past.has(lane.dataset.day)) continue;
+    for (const event of lane.querySelectorAll('.session')) {
+      event.style.setProperty('background-image', 'none', 'important');
+      event.style.setProperty('background-color', '#e5e5e5', 'important');
+      event.style.setProperty('color', '#737373', 'important');
+      event.style.setProperty('border-color', '#bcbcbc', 'important');
+      for (const child of event.querySelectorAll('*')) child.style.setProperty('color', '#737373', 'important');
+      for (const badge of event.querySelectorAll('.section-badge')) badge.style.setProperty('background-color', '#d1d1d1', 'important');
+    }
+  }
+}
+
 function cropCalendar(calendar, minTime, maxTime) {
   const clone = calendar.cloneNode(true);
   const offset = 0;
@@ -42,6 +60,7 @@ function cropCalendar(calendar, minTime, maxTime) {
   const width = 48 + dayCount * 238;
   clone.style.gridTemplateColumns = `48px repeat(${dayCount},238px)`;
   clone.style.width = `${width}px`;
+  fadePastEvents(calendar, clone);
   return {clone, width};
 }
 
