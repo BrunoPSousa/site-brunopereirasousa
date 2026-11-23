@@ -14,7 +14,7 @@ function updateCurrentTimeLine(){
  if(!lane)return;
  const firstTick=calendar.querySelector('.axis .tick');
  let minTime=600;
- if(firstTick){const match=firstTick.textContent.trim().match(/^(\\d{1,2}):(\\d{2})/);if(match)minTime=Number(match[1])*60+Number(match[2]);}
+ if(firstTick){const match=firstTick.textContent.trim().match(/^(\d{1,2}):(\d{2})/);if(match)minTime=Number(match[1])*60+Number(match[2]);}
  const top=(time.minutes-minTime)*1.6,height=Number.parseFloat(lane.style.height);
  if(!Number.isFinite(height)||top<0||top>height)return;
  const line=document.createElement('div');line.className='current-time-line';line.style.top=top+'px';line.setAttribute('aria-hidden','true');
